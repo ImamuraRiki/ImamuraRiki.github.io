@@ -239,7 +239,7 @@
     main.innerHTML = `
       <h1 class="visually-hidden">${esc(SITE.name)} — ${esc(tr(SITE.field))}</h1>
       <section class="projects" aria-labelledby="projects-title">
-        <h2 class="section-title" id="projects-title">${esc(ui("projects"))}</h2>
+        <header class="page-head"><h2 class="page-title" id="projects-title">${esc(ui("projects"))}</h2></header>
         <ul class="work-grid">${cards}</ul>
       </section>`;
   }
