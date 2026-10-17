@@ -19,11 +19,12 @@
  *   title       作品名。固有名詞なので翻訳せず、英語表記の文字列で書く
  *               （日本語表示でも同じ表記。{ en, ja } で書いても英語が使われます）
  *   year        制作年
- *   category    カテゴリー（一覧と詳細に表示）
+ *   category    カテゴリー（現在は画面に表示していません。将来の再表示用に残しています）
  *   tags        将来のカテゴリー絞り込み用（design / technology / research）。現在は表示に使っていません
  *   summary     一行説明（検索結果・SNSシェア用）
- *   cover       一覧に表示する画像（縦長 4:5 推奨）
- *   coverRatio  一覧の画像比率を変えたいとき（例 "3 / 2"）。省略時 "4 / 5"
+ *   cover       一覧に表示する画像（正方形 1:1 で表示。中央を基準に切り抜き）
+ *   coverPosition 切り抜く位置を調整したいとき（CSS の object-position。例 "50% 30%" で上寄り）。省略時 "50% 50%"
+ *   coverRatio  一覧の画像比率を変えたいとき（例 "4 / 5"）。省略時 "1 / 1"
  *   hero        詳細ページのメインビジュアル（縦長・横長どちらも可）
  *   concept     コンセプト
  *   overview    作品概要
@@ -47,14 +48,15 @@ window.WORKS = [
   {
     id: "leather-cell-vest",
     title: "LEATHER CELL VEST",
-    year: "2025",
+    year: "2026",
     category: { en: "Fashion Design / 3D Printing", ja: "ファッションデザイン / 3Dプリント" },
     tags: ["design", "technology"],
     summary: {
       en: "A vest built from a cellular structure, combining 3D-printed components and leather.",
       ja: "3Dプリントのパーツとレザーを組み合わせた、セル構造によるベスト。",
     },
-    cover: { src: "images/works/leather-cell-vest/cover.svg", alt: "" },
+    cover: { src: "images/works/leather-cell-vest/cover.jpg", alt: "", width: 1023, height: 1023 },
+    coverPosition: "50% 50%",
     hero: {
       src: "images/works/leather-cell-vest/hero.svg",
       alt: { en: "LEATHER CELL VEST, front view", ja: "LEATHER CELL VEST 正面" },
@@ -128,14 +130,15 @@ window.WORKS = [
   {
     id: "curve-cell",
     title: "CURVE CELL BAG",
-    year: "2025",
+    year: "2026",
     category: { en: "Structure / 3D Printing", ja: "構造 / 3Dプリント" },
     tags: ["design", "technology"],
     summary: {
       en: "A curved cellular structure that lets flat-printed surfaces take on three-dimensional form.",
       ja: "平面に出力した面が立体的なかたちをとる、曲線のセル構造。",
     },
-    cover: { src: "images/works/curve-cell/cover.svg", alt: "" },
+    cover: { src: "images/works/curve-cell/cover.jpg", alt: "", width: 1086, height: 1086 },
+    coverPosition: "50% 50%",
     hero: { src: "images/works/curve-cell/hero.svg", alt: { en: "CURVE CELL BAG structure", ja: "CURVE CELL BAG の構造" } },
     concept: {
       en: ["Curves instead of corners: a cell shape designed so that a flat print can follow the curvature of the body."],
@@ -169,14 +172,15 @@ window.WORKS = [
   {
     id: "3d-printed-textiles",
     title: "3D PRINTED TEXTILES",
-    year: "2025",
+    year: "2026",
     category: { en: "Textile / 3D Printing", ja: "テキスタイル / 3Dプリント" },
     tags: ["design", "technology"],
     summary: {
       en: "Textiles made by 3D printing, exploring new surfaces and structures for clothing.",
       ja: "3Dプリントによるテキスタイル。衣服のための新しい表面と構造を探る。",
     },
-    cover: { src: "images/works/3d-printed-textiles/cover.svg", alt: "" },
+    cover: { src: "images/works/3d-printed-textiles/cover.jpg", alt: "", width: 1086, height: 1086 },
+    coverPosition: "50% 50%",
     hero: { src: "images/works/3d-printed-textiles/hero.svg", alt: { en: "3D PRINTED TEXTILES samples", ja: "3D PRINTED TEXTILES のサンプル" } },
     concept: {
       en: ["Placeholder text — describe the idea behind the textiles."],

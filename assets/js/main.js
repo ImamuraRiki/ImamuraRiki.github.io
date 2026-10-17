@@ -228,11 +228,10 @@
       const cover = toImage(w.cover) || toImage(w.hero) || {};
       return `<li class="work-card">
         <a class="work-card__link" href="${workUrl(w)}">
-          <div class="work-card__media" style="--ratio: ${esc(w.coverRatio || "4 / 5")}">${img(cover, { eager: i < 2 })}</div>
+          <div class="work-card__media" style="--ratio: ${esc(w.coverRatio || "1 / 1")}; --position: ${esc(w.coverPosition || "50% 50%")}">${img(cover, { eager: i < 2 })}</div>
           <div class="work-card__caption">
             <h3 class="work-card__title">${esc(workTitle(w))}</h3>
             <span class="work-card__year">${esc(w.year)}</span>
-            <span class="work-card__category">${esc(tr(w.category))}</span>
           </div>
         </a>
       </li>`;
@@ -282,7 +281,8 @@
       .map((k) => `<div class="records-group"><h3 class="label">${esc(ui(k))}</h3>${records(w[k])}</div>`)
       .join("");
 
-    const meta = ["year", "category", "role"]
+    // category はデータに残すが、現在は表示しない
+    const meta = ["year", "role"]
       .filter((k) => tr(w[k]))
       .map((k) => `<div><dt class="label">${esc(ui(k))}</dt><dd>${esc(tr(w[k]))}</dd></div>`)
       .join("");
@@ -295,7 +295,7 @@
       <article class="work">
         <header class="work-head">
           <a class="back-link label" href="index.html">${esc(ui("backToWorks"))}</a>
-          <h1 class="work-title">${esc(title)}</h1>
+          <h1 class="page-title work-title">${esc(title)}</h1>
         </header>
         ${
           hero

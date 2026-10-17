@@ -17,3 +17,6 @@ _originals/
 *.3dm
 *.stl
 *.obj
+
+# 元写真（サイトでは images/works/ のコピーを使用）
+photo/
