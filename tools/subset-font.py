@@ -34,6 +34,10 @@ kana = set(range(0x3000, 0x3100)) | set(range(0x31F0, 0x3200)) | set(range(0xFF0
 # JIS X 0208 non-kanji rows 1-8 (symbols) that are not Latin
 symbols = {c for c in jis_level(range(1, 9)) if c > 0x2000}
 kana |= symbols
+# Kanji shown on every page (the name in the header) go into the small kana file,
+# so English pages never need to download the large kanji file.
+ALWAYS = "今村吏希"
+kana |= {ord(c) for c in ALWAYS}
 level1 = jis_level(range(16, 48)) - kana
 level2 = jis_level(range(48, 85)) - kana - level1
 # Rare kanji (level 2) get a broad range and are declared first: browsers try later rules first,

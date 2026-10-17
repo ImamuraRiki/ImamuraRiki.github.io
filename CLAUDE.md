@@ -13,5 +13,5 @@ Static site (plain HTML/CSS/JS, no build step) published on GitHub Pages at http
 - Design rules: white background, black/dark-grey text, no shadows/gradients/rounded buttons, no extra rules or buttons, subtle motion only (respect `prefers-reduced-motion`). The home page should lead with photos: header → PROJECTS → grid.
 - Category filters were removed on purpose; `tags`/`category` stay in the data for a possible future filter.
 - Preview: `python3 -m http.server 8000` in this folder.
-- Commit freely, but ask the owner before `git push`.
+- Commit freely, but never `git push` — the owner always pushes themselves.
 - Work only inside this folder; never touch sibling projects (`../pattern-am-cad`, etc.).

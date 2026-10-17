@@ -7,6 +7,7 @@
  */
 window.SITE = {
   name: "RIKI IMAMURA",
+  nameJa: "今村吏希", // 英語名の横に小さく表示（どちらの言語でも表示）
   field: {
     en: "Fashion Design / Digital Fabrication",
     ja: "ファッションデザイン / デジタルファブリケーション",
@@ -23,7 +24,7 @@ window.SITE = {
 
   // ヘッダーのナビゲーション（ページを増やすときはここに追加）
   nav: [
-    { id: "works", label: { en: "Works", ja: "作品" }, href: "index.html" },
+    { id: "works", label: { en: "PROJECT", ja: "プロジェクト" }, href: "index.html" },
     { id: "about", label: { en: "About", ja: "プロフィール" }, href: "about.html" },
     { id: "contact", label: { en: "Contact", ja: "お問い合わせ" }, href: "contact.html" },
   ],

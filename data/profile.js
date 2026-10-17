@@ -7,7 +7,10 @@
  * 公開前の受賞結果や、確認できていない経歴は載せないでください。
  */
 window.PROFILE = {
-  name: "RIKI IMAMURA",
+  name: "RIKI IMAMURA", // 日本語名は site.js の nameJa
+
+  // 生年月日（YYYY-MM-DD）。年齢は閲覧日から自動で計算されます
+  birthDate: "2004-08-30",
 
   // 写真を載せる場合：{ src: "images/about/portrait.jpg", alt: { en: "Portrait of Riki Imamura", ja: "RIKI IMAMURA のポートレート" } }
   portrait: null,
@@ -62,16 +65,6 @@ window.PROFILE = {
   awards: [
     {
       year: "2026",
-      title: { en: "The 26th YKK FASTENING AWARDS", ja: "第26回 YKKファスニングアワード" },
-      status: { en: "Selected (Final awards pending)", ja: "入選（最終結果発表待ち）" },
-    },
-    {
-      year: "2026",
-      title: { en: "Japan Leather Award 2026", ja: "ジャパンレザーアワード2026" },
-      status: { en: "Selected Work (Final awards pending)", ja: "入賞（最終結果発表待ち）" },
-    },
-    {
-      year: "2026",
       title: { en: "Nippori Fashion Design Contest 2026", ja: "日暮里ファッションデザインコンテスト2026" },
       status: { en: "Selected (Final results pending)", ja: "入選（最終結果発表待ち）" },
     },
@@ -79,6 +72,16 @@ window.PROFILE = {
       year: "2026",
       title: "Next Fashion Designer of Tokyo 2027",
       status: { en: "Passed the First Screening (Work in progress)", ja: "一次審査通過（作品制作中）" },
+    },
+    {
+      year: "2026",
+      title: { en: "The 26th YKK FASTENING AWARDS", ja: "第26回 YKKファスニングアワード" },
+      status: { en: "Selected (Final awards pending)", ja: "入選（最終結果発表待ち）" },
+    },
+    {
+      year: "2026",
+      title: { en: "Japan Leather Award 2026", ja: "ジャパンレザーアワード2026" },
+      status: { en: "Selected Work (Final awards pending)", ja: "入賞（最終結果発表待ち）" },
     },
   ],
 

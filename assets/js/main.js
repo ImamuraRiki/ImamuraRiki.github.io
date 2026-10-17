@@ -114,6 +114,28 @@
       .join("")}</dl>`;
   }
 
+  // 英語名＋日本語名（日本語名は小さく併記。どちらの言語でも表示）
+  const personName = (en, ja, cls) =>
+    `<span class="${cls}__en">${esc(en)}</span>${ja ? `<span class="${cls}__ja" lang="ja">${esc(ja)}</span>` : ""}`;
+
+  // "YYYY-MM-DD" → { y, m, d }（タイムゾーンの影響を受けないよう文字列から読む）
+  const parseDate = (s) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+    return m ? { y: +m[1], m: +m[2], d: +m[3] } : null;
+  };
+
+  // 閲覧日時点の満年齢
+  const ageOn = (b, today = new Date()) => {
+    const m = today.getMonth() + 1;
+    const beforeBirthday = m < b.m || (m === b.m && today.getDate() < b.d);
+    return today.getFullYear() - b.y - (beforeBirthday ? 1 : 0);
+  };
+
+  const formatDate = (b) =>
+    new Intl.DateTimeFormat(lang === "ja" ? "ja-JP" : "en-US", { year: "numeric", month: "long", day: "numeric" }).format(
+      new Date(b.y, b.m - 1, b.d)
+    );
+
   // 自由セクション：{ label, text } または { label, items }
   const customSections = (sections) =>
     list(sections).map((s) => block(tr(s.label), s.items ? records(s.items) : prose(s.text))).join("");
@@ -168,7 +190,7 @@
     ).join('<span aria-hidden="true">/</span>');
 
     header.innerHTML = `
-      <a class="site-title" href="index.html">${esc(SITE.name)}</a>
+      <a class="site-title" href="index.html">${personName(SITE.name, SITE.nameJa, "site-title")}</a>
       <nav class="site-nav" aria-label="${esc(ui("mainNav"))}"><ul>${nav}</ul></nav>
       <div class="lang-switch" role="group" aria-label="${esc(ui("language"))}">${switcher}</div>`;
 
@@ -316,6 +338,7 @@
   function renderAbout(main) {
     const p = PROFILE;
     const portrait = toImage(p.portrait);
+    const birth = parseDate(p.birthDate);
     setPageMeta(`${ui("about")} — ${SITE.name}`, list(p.biography)[0] || tr(SITE.description));
 
     const interests = list(p.fieldsOfInterest).length
@@ -327,7 +350,13 @@
       <section class="about-intro${portrait ? "" : " about-intro--text"}">
         ${portrait ? `<figure class="about-intro__portrait">${img(portrait, { eager: true })}</figure>` : ""}
         <dl class="profile">
-          <div><dt class="label">${esc(ui("name"))}</dt><dd>${esc(tr(p.name) || SITE.name)}</dd></div>
+          <div class="profile__name"><dt class="label">${esc(ui("name"))}</dt><dd>${personName(tr(p.name) || SITE.name, p.nameJa || SITE.nameJa, "profile-name")}</dd></div>
+          ${
+            birth
+              ? `<div><dt class="label">${esc(ui("dateOfBirth"))}</dt><dd><time datetime="${esc(p.birthDate)}">${esc(formatDate(birth))}</time></dd></div>
+                 <div><dt class="label">${esc(ui("age"))}</dt><dd>${esc(ui("ageValue").replace("{n}", ageOn(birth)))}</dd></div>`
+              : ""
+          }
         </dl>
       </section>
       ${block(ui("biography"), prose(p.biography))}
@@ -348,6 +377,7 @@
         "@context": "https://schema.org",
         "@type": "Person",
         name: SITE.name,
+        alternateName: SITE.nameJa,
         jobTitle: (f && f.en) || f,
         url: SITE.baseUrl,
         sameAs: (SITE.contact && SITE.contact.items ? SITE.contact.items : []).map((c) => c.href).filter(isExternal),
