@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://your-username.github.io/portfolio/sitemap.xml
+Sitemap: https://imamurariki.github.io/sitemap.xml

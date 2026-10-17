@@ -1,36 +1,41 @@
 # RIKI IMAMURA — Portfolio
 
 ファッションデザインとデジタルファブリケーションを軸とした個人ポートフォリオサイトです。
-HTML / CSS / JavaScript だけで作られた静的サイトで、GitHub Pages でそのまま公開できます。
+HTML / CSS / JavaScript だけで作られた静的サイトで、GitHub Pages で公開しています。
+
+公開URL：https://imamurariki.github.io/
 
 ## フォルダ構成
 
 ```
 portfolio/
-├── index.html          WORKS（トップ・作品一覧）
+├── index.html          WORKS（トップ・PROJECTS 一覧）
 ├── work.html           作品詳細（work.html?id=作品ID で各作品を表示）
 ├── about.html          ABOUT
 ├── contact.html        CONTACT
 ├── 404.html            ページが見つからないとき
 ├── data/               ★ 内容の編集はここだけ
-│   ├── site.js         サイト名・紹介文・ナビ・連絡先・公開URL
-│   ├── profile.js      プロフィール・学歴・受賞歴・研究関心
+│   ├── site.js         サイト名・ナビ・連絡先・公開URL
+│   ├── i18n.js         見出しやボタンなど UI の日本語・英語
+│   ├── profile.js      プロフィール・学歴・受賞歴・研究テーマ
 │   └── works.js        作品データ（一覧と詳細ページの元データ）
 ├── images/
 │   ├── works/<作品ID>/ 作品ごとの画像（cover / hero / process-xx / gallery-xx）
 │   └── about/          プロフィール写真
 ├── assets/
 │   ├── css/style.css   デザイン
-│   ├── js/main.js      表示処理（通常は編集不要）
+│   ├── css/fonts.css   和文フォントの読み込み（自動生成）
+│   ├── fonts/source-han-sans-jp/  源ノ角ゴシックのWebフォントとライセンス
+│   ├── js/main.js      表示処理・言語切り替え（通常は編集不要）
 │   └── img/favicon.svg
-├── tools/make-sitemap.mjs   sitemap.xml を作り直すスクリプト
+├── tools/
+│   ├── make-sitemap.mjs   sitemap.xml / robots.txt を作り直す
+│   └── subset-font.py     和文Webフォントを作り直す（通常は不要）
 ├── sitemap.xml / robots.txt 検索エンジン向け
 └── .nojekyll           GitHub Pages 用の設定
 ```
 
 ## ローカルで確認する
-
-ターミナルで portfolio フォルダに移動して、次を実行します。
 
 ```sh
 cd ~/Projects/portfolio
@@ -38,7 +43,15 @@ python3 -m http.server 8000
 ```
 
 ブラウザで http://localhost:8000 を開きます。終了は `Ctrl + C`。
-（`index.html` をダブルクリックして開いても表示できます）
+
+## 日本語・英語（EN / JP）
+
+- ヘッダーの EN / JP で切り替わります。初期表示は英語で、選んだ言語はブラウザに保存されます。
+- 文章は `{ en: "英語", ja: "日本語" }` の形で書きます。段落が複数ある項目は
+  `{ en: ["段落1", "段落2"], ja: ["段落1", "段落2"] }`。
+- 作品名などの固有名詞は `"LEATHER CELL VEST"` のように文字列のままで、両方の言語で同じ表示になります。
+- 片方の言語が未入力の場合は英語が表示されます。
+- 「PROJECTS / プロジェクト」などの UI の言葉は `data/i18n.js` で変更できます。
 
 ## 作品を追加・編集する
 
@@ -50,36 +63,22 @@ python3 -m http.server 8000
 - 並び順は `works.js` に書いた順番です。
 - `draft: true` にすると非公開になります。
 - 受賞歴・展示歴は、空 `[]` のままならセクションごと表示されません。
+- `tags` は将来カテゴリー絞り込みを再導入するためのデータです（現在は表示に使っていません）。
 
 ### 画像について
 
 - 現在の画像はすべて仮画像（`.svg`）です。写真は `.jpg` か `.webp` で同じフォルダに置き、`works.js` の `src` を書き換えます。
-- 目安：長辺 2000px 程度、1枚 500KB 以下（大きすぎると表示が遅くなります）。
-  macOS なら「プレビュー」→ ツール → サイズを調整 で縮小できます。
-- 一覧のカバー画像は縦長（4:5）推奨です。詳細ページの画像は縦長・横長どちらでも自動でレイアウトされます（横長は全幅、縦長は2列）。
+- 目安：長辺 2000px 程度、1枚 500KB 以下。macOS なら「プレビュー」→ ツール → サイズを調整 で縮小できます。
+- 一覧のカバー画像は縦長（4:5）推奨です。詳細ページの画像は縦長・横長どちらでも自動でレイアウトされます。
 - 未加工の大きな元データは `_originals/` フォルダに置けば、Git に含まれず公開されません。
 
-## プロフィール・連絡先を編集する
+## フォント
 
-- ABOUT：`data/profile.js`（公表済み・確認済みの情報のみ載せてください）
-- CONTACT・フッターのリンク：`data/site.js` の `contact.items`
-- ページを追加するとき：既存の HTML をコピーし、`data/site.js` の `nav` に追加します。
-
-## GitHub Pages で公開する
-
-> 現在は仮のURL `https://your-username.github.io/portfolio/` を使っています。
-
-1. GitHub で新しいリポジトリを作成（Public、README などは追加しない）
-2. このフォルダをアップロード
-   ```sh
-   git remote add origin https://github.com/<ユーザー名>/<リポジトリ名>.git
-   git push -u origin main
-   ```
-3. GitHub のリポジトリ → **Settings** → **Pages**
-   → Source: **Deploy from a branch** → Branch: **main** / **/(root)** → **Save**
-4. 数分後、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開されます
-5. 公開URLが決まったら、仮URLをすべて置き換えて `node tools/make-sitemap.mjs` を実行
-   （`your-username.github.io/portfolio` を検索して置換。`data/site.js` と各 HTML の `<head>`）
+- 欧文：Helvetica Neue / Helvetica（閲覧者の端末に入っているものを使用。フォントファイルは同梱していません）。ない環境では Arial。
+- 和文：源ノ角ゴシック（Source Han Sans JP、Adobe、SIL Open Font License 1.1）。
+  - Webフォントとして同梱しています。JIS第1・第2水準の文字に絞り、文字種ごとに3ファイルに分割しているため、ページで使われた分だけが読み込まれます（英語表示では読み込まれません）。
+  - OFL の規定で、改変（サブセット化）したフォントには予約名「Source」を使えないため、フォント内部名は「Han Sans JP Web」に変更しています。著作権表示とライセンスはそのまま保持し、`assets/fonts/source-han-sans-jp/LICENSE.txt` を同梱しています。
+  - 閲覧者の端末に源ノ角ゴシックがインストールされている場合は、そちらが使われます。
 
 ## 公開後の更新
 
@@ -89,10 +88,10 @@ git commit -m "Add new work"
 git push
 ```
 
-push すると 1〜2 分で公開サイトに反映されます。
+push すると 1〜2 分で https://imamurariki.github.io/ に反映されます。
 
 ## URL を変えないために（QRコード用）
 
-- リポジトリ名と GitHub ユーザー名を変えると URL が変わります。名刺を刷った後は変更しないでください。
+- リポジトリ名（ImamuraRiki.github.io）と GitHub ユーザー名を変えると URL が変わります。名刺を刷った後は変更しないでください。
 - 作品の `id` も URL の一部です。公開後は変えないでください。
 - 将来ドメインを持つ場合は、Settings → Pages → Custom domain で独自ドメインを設定できます。

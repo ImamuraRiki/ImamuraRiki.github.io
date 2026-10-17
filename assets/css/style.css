@@ -13,8 +13,9 @@
   --space-section: clamp(56px, 8vw, 120px);
   --offset: clamp(80px, 12vw, 200px);
 
-  --font: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
-    "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  /* 欧文は Helvetica Neue / Helvetica（端末内蔵のものを使用・ファイルは配布しない）、なければ Arial。
+     和文は源ノ角ゴシック（assets/css/fonts.css。欧文フォントにない文字だけに適用される） */
+  --font: "Helvetica Neue", Helvetica, Arial, "Han Sans JP Web", sans-serif;
   --fs-xs: 11px;
   --fs-s: 13px;
   --fs-m: 15px;
@@ -171,16 +172,16 @@ img.fade.is-loaded {
   position: sticky;
   top: 0;
   z-index: 10;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
+  column-gap: clamp(24px, 4vw, 56px);
   padding: 22px var(--gutter);
   background: rgba(255, 255, 255, 0.94);
+  font-size: var(--fs-s);
 }
 
 .site-title {
-  font-size: var(--fs-s);
   font-weight: 500;
   letter-spacing: 0.18em;
   white-space: nowrap;
@@ -191,16 +192,63 @@ img.fade.is-loaded {
   gap: clamp(18px, 3vw, 44px);
 }
 
-.site-nav a {
-  font-size: var(--fs-s);
+.site-nav a,
+.lang-switch {
   letter-spacing: 0.06em;
   color: var(--muted);
+  white-space: nowrap;
+}
+
+.site-nav a {
   transition: color 0.3s;
 }
 
 .site-nav a:hover,
-.site-nav a[aria-current="page"] {
+.site-nav a[aria-current="page"],
+.lang-switch button:hover,
+.lang-switch button[aria-pressed="true"] {
   color: var(--fg);
+}
+
+.lang-switch {
+  display: flex;
+  gap: 6px;
+}
+
+.lang-switch button {
+  letter-spacing: inherit;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+
+/* スマートフォン：1行目に名前と EN / JP、2行目にナビ。横にはみ出さない */
+@media (max-width: 599px) {
+  .site-header {
+    position: static;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title lang"
+      "nav nav";
+    row-gap: 10px;
+    padding-top: 18px;
+    padding-bottom: 0;
+  }
+
+  .site-title {
+    grid-area: title;
+  }
+
+  .lang-switch {
+    grid-area: lang;
+  }
+
+  .site-nav {
+    grid-area: nav;
+  }
+
+  .site-nav ul {
+    gap: 20px;
+  }
 }
 
 .site-nav a[aria-current="page"] {
@@ -240,55 +288,22 @@ main:focus {
 
 /* ---------- WORKS ---------- */
 
-.intro {
-  max-width: 1080px;
-  padding: clamp(64px, 13vw, 200px) 0 clamp(56px, 9vw, 140px);
+/* ヘッダー直下の見出し。写真がすぐ見えるよう余白は控えめに */
+.projects {
+  padding-top: clamp(28px, 5vw, 72px);
 }
 
-.intro__lead {
-  font-size: var(--fs-l);
-  line-height: 1.45;
-  letter-spacing: -0.005em;
-}
-
-.intro__field {
-  margin-top: 28px;
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 28px;
-  margin-bottom: clamp(32px, 5vw, 72px);
-}
-
-.filters button {
-  padding: 4px 0;
-  border-bottom: 1px solid transparent;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color 0.3s, border-color 0.3s;
-}
-
-.filters button:hover,
-.filters button[aria-pressed="true"] {
-  color: var(--fg);
-}
-
-.filters button[aria-pressed="true"] {
-  border-color: var(--fg);
+.section-title {
+  margin-bottom: clamp(20px, 3vw, 40px);
+  font-size: var(--fs-s);
+  font-weight: 500;
+  letter-spacing: 0.16em;
 }
 
 .work-grid {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 72px;
-}
-
-.work-card[hidden] {
-  display: none;
 }
 
 .work-card__link {
@@ -344,7 +359,7 @@ main:focus {
   }
 
   /* 右列を下にずらしたエディトリアルな配置 */
-  .work-card.is-offset {
+  .work-card:nth-child(even) {
     transform: translateY(var(--offset));
   }
 }
@@ -757,6 +772,38 @@ a.contact-list__value:hover {
   width: auto;
   height: auto;
   object-fit: contain;
+}
+
+/* ---------- Japanese typography ---------- */
+
+:lang(ja) body,
+body:lang(ja) {
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  line-break: strict;
+}
+
+:lang(ja) .lead {
+  font-size: clamp(18px, 1.9vw, 26px);
+  line-height: 1.75;
+  letter-spacing: 0.04em;
+}
+
+/* 和文の大見出しは字間を詰めすぎない */
+:lang(ja) .page-title {
+  font-size: clamp(32px, 5vw, 72px);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  font-feature-settings: "palt";
+}
+
+:lang(ja) .profile dd,
+:lang(ja) .contact-list__value {
+  letter-spacing: 0.02em;
+}
+
+:lang(ja) .label {
+  letter-spacing: 0.1em;
 }
 
 /* ---------- motion preferences ---------- */
