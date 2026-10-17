@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2000" viewBox="0 0 1600 2000">
-<defs><pattern id="p" width="230.4" height="153.6" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="230.4" height="153.6" fill="none" stroke="#cfcdc7" stroke-width="2.9" stroke-dasharray="11.5 9.6"/><path d="M0,153.6 L230.4,0" stroke="#cfcdc7" stroke-width="2.9"/></pattern></defs>
-<rect width="1600" height="2000" fill="#e4e3df"/>
-<rect x="192" y="192" width="1216" height="1616" fill="url(#p)"/>
-<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="35" fill="#9b9993" letter-spacing="6.3">
-<text x="192" y="1890">ZERO CUT PATTERN — GALLERY-01</text>
-<text x="192" y="1967">4:5 PLACEHOLDER</text>
-</g>
-</svg>

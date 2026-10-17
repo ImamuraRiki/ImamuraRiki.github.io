@@ -12,11 +12,12 @@
  * ■ 日本語・英語
  *   文章は { en: "英語", ja: "日本語" } の形で書きます。段落が複数ある項目は
  *   { en: ["段落1", "段落2"], ja: ["段落1", "段落2"] } です。
- *   作品名などの固有名詞は "..." のままで構いません（両方の言語で同じ表示）。
+ *   作品名は翻訳しません。"LEATHER CELL VEST" のように英語表記の文字列で書きます。
  *
  * ■ 項目（必須は id / title / year / category / cover）
  *   id          URL用ID
- *   title       作品名
+ *   title       作品名。固有名詞なので翻訳せず、英語表記の文字列で書く
+ *               （日本語表示でも同じ表記。{ en, ja } で書いても英語が使われます）
  *   year        制作年
  *   category    カテゴリー（一覧と詳細に表示）
  *   tags        将来のカテゴリー絞り込み用（design / technology / research）。現在は表示に使っていません
@@ -126,7 +127,7 @@ window.WORKS = [
 
   {
     id: "curve-cell",
-    title: "CURVE CELL",
+    title: "CURVE CELL BAG",
     year: "2025",
     category: { en: "Structure / 3D Printing", ja: "構造 / 3Dプリント" },
     tags: ["design", "technology"],
@@ -135,7 +136,7 @@ window.WORKS = [
       ja: "平面に出力した面が立体的なかたちをとる、曲線のセル構造。",
     },
     cover: { src: "images/works/curve-cell/cover.svg", alt: "" },
-    hero: { src: "images/works/curve-cell/hero.svg", alt: { en: "CURVE CELL structure", ja: "CURVE CELL の構造" } },
+    hero: { src: "images/works/curve-cell/hero.svg", alt: { en: "CURVE CELL BAG structure", ja: "CURVE CELL BAG の構造" } },
     concept: {
       en: ["Curves instead of corners: a cell shape designed so that a flat print can follow the curvature of the body."],
       ja: ["角ではなく曲線で。平面の出力物が身体の曲面に沿うように設計したセル形状。"],
@@ -166,105 +167,36 @@ window.WORKS = [
   },
 
   {
-    id: "zero-cut-pattern",
-    title: "ZERO CUT PATTERN",
-    year: "2024",
-    category: { en: "Pattern Making", ja: "パターンメイキング" },
-    tags: ["design"],
+    id: "3d-printed-textiles",
+    title: "3D PRINTED TEXTILES",
+    year: "2025",
+    category: { en: "Textile / 3D Printing", ja: "テキスタイル / 3Dプリント" },
+    tags: ["design", "technology"],
     summary: {
-      en: "A pattern-making method that forms garments without cutting the material.",
-      ja: "素材を裁断せずに衣服をかたちづくるパターンの手法。",
+      en: "Textiles made by 3D printing, exploring new surfaces and structures for clothing.",
+      ja: "3Dプリントによるテキスタイル。衣服のための新しい表面と構造を探る。",
     },
-    cover: { src: "images/works/zero-cut-pattern/cover.svg", alt: "" },
-    hero: { src: "images/works/zero-cut-pattern/hero.svg", alt: { en: "ZERO CUT PATTERN layout", ja: "ZERO CUT PATTERN のレイアウト" } },
+    cover: { src: "images/works/3d-printed-textiles/cover.svg", alt: "" },
+    hero: { src: "images/works/3d-printed-textiles/hero.svg", alt: { en: "3D PRINTED TEXTILES samples", ja: "3D PRINTED TEXTILES のサンプル" } },
     concept: {
-      en: [
-        "What if a garment could be made without a single cut?",
-        "Placeholder text — explain the idea behind the pattern and what it changes about making clothes.",
-      ],
-      ja: [
-        "一度もハサミを入れずに、衣服はつくれるだろうか。",
-        "仮のテキストです。パターンの考え方と、それが服づくりの何を変えるのかを説明してください。",
-      ],
+      en: ["Placeholder text — describe the idea behind the textiles."],
+      ja: ["仮のテキストです。テキスタイルのコンセプトを記述してください。"],
     },
     overview: {
-      en: [
-        "Placeholder text — describe the pattern system, the garments produced with it, and the results.",
-        "Longer descriptions can be split into several paragraphs; the layout adapts to any length.",
-        "A third paragraph to show how longer text flows in the page.",
-      ],
-      ja: [
-        "仮のテキストです。パターンの仕組み、それによって制作した衣服、成果を記述してください。",
-        "長い説明は複数の段落に分けられます。文章量に合わせてレイアウトが調整されます。",
-        "長い文章がページ内でどのように流れるかを確認するための3つ目の段落です。",
-      ],
-    },
-    process: [
-      {
-        title: { en: "Pattern study", ja: "パターンの検討" },
-        text: { en: "Placeholder text for the first step of the process.", ja: "制作プロセスの最初の段階についての仮テキストです。" },
-        image: {
-          src: "images/works/zero-cut-pattern/process-01.svg",
-          alt: { en: "Pattern study", ja: "パターンの検討" },
-          caption: { en: "Pattern study", ja: "パターンの検討" },
-        },
-      },
-    ],
-    materials: [
-      { label: { en: "Technique", ja: "技術" }, value: { en: "Pattern making, draping", ja: "パターンメイキング、ドレーピング" } },
-      { label: { en: "Material", ja: "素材" }, value: { en: "Wool", ja: "ウール" } },
-    ],
-    gallery: [
-      { src: "images/works/zero-cut-pattern/gallery-01.svg", alt: "Look 1", caption: "Look 1" },
-      { src: "images/works/zero-cut-pattern/gallery-02.svg", alt: { en: "Flat pattern", ja: "平面パターン" }, caption: { en: "Flat pattern", ja: "平面パターン" } },
-      { src: "images/works/zero-cut-pattern/gallery-03.svg", alt: "Look 2", caption: "Look 2" },
-      { src: "images/works/zero-cut-pattern/gallery-04.svg", alt: "Look 3", caption: "Look 3" },
-      { src: "images/works/zero-cut-pattern/gallery-05.svg", alt: { en: "Overview of all looks", ja: "全ルック" }, caption: { en: "All looks", ja: "全ルック" } },
-    ],
-  },
-
-  {
-    id: "digital-fabrication-research",
-    title: "DIGITAL FABRICATION RESEARCH",
-    year: "2024–",
-    category: { en: "Research", ja: "研究" },
-    tags: ["research", "technology"],
-    summary: {
-      en: "Ongoing research into digital fabrication techniques for clothing.",
-      ja: "衣服のためのデジタルファブリケーション技術についての継続的な研究。",
-    },
-    cover: { src: "images/works/digital-fabrication-research/cover.svg", alt: "" },
-    hero: { src: "images/works/digital-fabrication-research/hero.svg", alt: { en: "Research samples", ja: "研究サンプル" } },
-    concept: {
-      en: ["Research into how digital fabrication can change the way garments are designed, produced and repaired."],
-      ja: ["デジタルファブリケーションによって、衣服のデザイン、生産、修理のあり方はどう変わるのかを探る研究。"],
-    },
-    overview: {
-      en: [
-        "Placeholder text — summarise the research questions, methods and findings.",
-        "This entry is intended to grow over time with experiments, papers and software.",
-      ],
-      ja: [
-        "仮のテキストです。研究課題、手法、得られた知見をまとめてください。",
-        "このページは、実験・論文・ソフトウェアなどを今後追加していくことを想定しています。",
-      ],
+      en: ["Placeholder text — describe the textiles, how they are made, and how they are used in garments."],
+      ja: ["仮のテキストです。テキスタイルの特徴、制作方法、衣服での使い方などを記述してください。"],
     },
     process: [
       { title: { en: "Material tests", ja: "素材の検証" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
-      { title: { en: "Fabrication parameters", ja: "出力条件の検討" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
-      { title: { en: "Evaluation", ja: "評価" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
+      { title: { en: "Printing", ja: "出力" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
     ],
     materials: [
-      { label: { en: "Fields", ja: "分野" }, value: { en: "Digital fabrication, material research", ja: "デジタルファブリケーション、素材研究" } },
-      { label: { en: "Tools", ja: "機材" }, value: { en: "3D printer, laser cutter", ja: "3Dプリンター、レーザーカッター" } },
+      { label: { en: "Technique", ja: "技術" }, value: { en: "3D printing", ja: "3Dプリント" } },
+      { label: { en: "Material", ja: "素材" }, value: { en: "Placeholder", ja: "仮" } },
     ],
     gallery: [
-      { src: "images/works/digital-fabrication-research/gallery-01.svg", alt: { en: "Test samples", ja: "テストサンプル" }, caption: { en: "Test samples", ja: "テストサンプル" } },
-      { src: "images/works/digital-fabrication-research/gallery-02.svg", alt: { en: "Measurement setup", ja: "計測の様子" }, caption: { en: "Measurement", ja: "計測" } },
-    ],
-    publications: [],
-    sections: [
-      // { label: { en: "Notes", ja: "メモ" }, text: { en: ["..."], ja: ["..."] } },
+      { src: "images/works/3d-printed-textiles/gallery-01.svg", alt: { en: "Textile sample", ja: "テキスタイルのサンプル" }, caption: { en: "Sample", ja: "サンプル" } },
+      { src: "images/works/3d-printed-textiles/gallery-02.svg", alt: { en: "Detail", ja: "ディテール" }, caption: { en: "Detail", ja: "ディテール" } },
     ],
   },
 ];

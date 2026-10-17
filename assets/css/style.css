@@ -11,7 +11,6 @@
 
   --gutter: clamp(20px, 4.2vw, 64px);
   --space-section: clamp(56px, 8vw, 120px);
-  --offset: clamp(80px, 12vw, 200px);
 
   /* 欧文は Helvetica Neue / Helvetica（端末内蔵のものを使用・ファイルは配布しない）、なければ Arial。
      和文は源ノ角ゴシック（assets/css/fonts.css。欧文フォントにない文字だけに適用される） */
@@ -363,12 +362,7 @@ main:focus {
     grid-template-columns: 1fr 1fr;
     column-gap: clamp(32px, 6vw, 120px);
     row-gap: clamp(80px, 9vw, 160px);
-    padding-bottom: var(--offset);
-  }
-
-  /* 右列を下にずらしたエディトリアルな配置 */
-  .work-card:nth-child(even) {
-    transform: translateY(var(--offset));
+    align-items: start;
   }
 }
 

@@ -42,6 +42,8 @@
   };
   const pad = (n) => String(n).padStart(2, "0");
   const toImage = (v) => (typeof v === "string" ? { src: v } : v || null);
+  // 作品名は固有名詞なので翻訳しない（{ en, ja } で書かれていても英語表記を使う）
+  const workTitle = (w) => (typeof w.title === "string" ? w.title : (w.title && w.title.en) || "");
   const workUrl = (w) => `work.html?id=${encodeURIComponent(w.id)}`;
   const isExternal = (href) => /^https?:\/\//.test(href || "");
   const linkAttrs = (href) => (isExternal(href) ? ' target="_blank" rel="noopener"' : "");
@@ -228,7 +230,7 @@
         <a class="work-card__link" href="${workUrl(w)}">
           <div class="work-card__media" style="--ratio: ${esc(w.coverRatio || "4 / 5")}">${img(cover, { eager: i < 2 })}</div>
           <div class="work-card__caption">
-            <h3 class="work-card__title">${esc(tr(w.title))}</h3>
+            <h3 class="work-card__title">${esc(workTitle(w))}</h3>
             <span class="work-card__year">${esc(w.year)}</span>
             <span class="work-card__category">${esc(tr(w.category))}</span>
           </div>
@@ -252,7 +254,7 @@
     if (index < 0) return renderNotFound(main);
 
     const w = WORKS[index];
-    const title = tr(w.title);
+    const title = workTitle(w);
     const hero = toImage(w.hero) || toImage(w.cover);
     setPageMeta(`${title} — ${SITE.name}`, tr(w.summary) || list(w.concept)[0], workUrl(w));
 
@@ -315,8 +317,8 @@
       ${
         WORKS.length > 1
           ? `<nav class="pager" aria-label="${esc(ui("moreWorks"))}">
-              <a class="pager__link" href="${workUrl(prev)}"><span class="label">${esc(ui("previous"))}</span><span class="pager__title">${esc(tr(prev.title))}</span></a>
-              <a class="pager__link pager__link--next" href="${workUrl(next)}"><span class="label">${esc(ui("next"))}</span><span class="pager__title">${esc(tr(next.title))}</span></a>
+              <a class="pager__link" href="${workUrl(prev)}"><span class="label">${esc(ui("previous"))}</span><span class="pager__title">${esc(workTitle(prev))}</span></a>
+              <a class="pager__link pager__link--next" href="${workUrl(next)}"><span class="label">${esc(ui("next"))}</span><span class="pager__title">${esc(workTitle(next))}</span></a>
             </nav>`
           : ""
       }`;
