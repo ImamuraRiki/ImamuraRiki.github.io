@@ -30,15 +30,15 @@ window.SITE = {
 
   contact: {
     intro: {
-      en: "For collaborations, research, commissions, and exhibition inquiries, please get in touch.",
-      ja: "コラボレーション、研究、制作のご依頼、展示に関するお問い合わせは、こちらからご連絡ください。",
+      en: "For inquiries, please contact me at the email address below.",
+      ja: "お問い合わせは、以下のメールアドレスまでご連絡ください。",
     },
-    // 連絡先（仮の情報です）。footer: false にするとフッターには表示しません。
-    items: [
-      { label: { en: "Email", ja: "メール" }, value: "hello@example.com", href: "mailto:hello@example.com" },
-      { label: "Instagram", value: "@your_instagram", href: "https://www.instagram.com/your_instagram/" },
-      // { label: "LinkedIn", value: "Riki Imamura", href: "https://www.linkedin.com/in/xxxx/" },
-      // { label: "GitHub", value: "your-username", href: "https://github.com/your-username", footer: false },
-    ],
+    // 連絡先。迷惑メール対策のため、メールアドレスは "()" 表記のまま・リンクなし（href なし）で表示します。
+    // SNS などを追加する場合は { label, value, href } を追加します（href があるものはフッターにも表示。footer: false で非表示）。
+    items: [{ label: { en: "Email", ja: "メール" }, value: "rk30.8se()icloud.com" }],
+    note: {
+      en: "Please replace “()” with “@” when sending an email.",
+      ja: "送信時は「()」を「@」に置き換えてください。",
+    },
   },
 };

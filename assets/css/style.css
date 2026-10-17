@@ -588,6 +588,21 @@ figcaption {
   font-size: var(--fs-s);
 }
 
+/* 学歴など、年月と状態をタイトルの上に置く形式 */
+.records li.is-stacked {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.records li.is-stacked .records__detail {
+  grid-column: 1;
+}
+
+.records__date {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: var(--fs-s);
+}
+
 .records-group + .records-group {
   margin-top: 48px;
 }
@@ -716,6 +731,12 @@ a.contact-list__value {
 
 a.contact-list__value:hover {
   opacity: 0.45;
+}
+
+.contact-note {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: var(--fs-s);
 }
 
 /* ---------- lightbox ---------- */

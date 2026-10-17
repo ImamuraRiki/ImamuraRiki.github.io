@@ -1,63 +1,89 @@
 /*
  * ABOUT ページの内容
  * ------------------------------------------------------------
- * 経歴・受賞歴はここに追加します。
- * 公開前の受賞結果や、確認できていない経歴は載せないでください。
- * 項目が空（[]）のセクションは自動で非表示になります。
+ * 表示順：Biography → Education → Fields of Interest → Awards & Selections
  * 文章は { en: "英語", ja: "日本語" } の形で書くと EN / JP 切り替えに対応します。
+ * 項目が空（[]）のセクションは自動で非表示になります。
+ * 公開前の受賞結果や、確認できていない経歴は載せないでください。
  */
 window.PROFILE = {
   name: "RIKI IMAMURA",
-  field: {
-    en: "Fashion Design / Digital Fabrication",
-    ja: "ファッションデザイン / デジタルファブリケーション",
-  },
 
-  // 写真が不要なら portrait: null
-  portrait: { src: "images/about/portrait.svg", alt: { en: "Portrait of Riki Imamura", ja: "RIKI IMAMURA のポートレート" } },
+  // 写真を載せる場合：{ src: "images/about/portrait.jpg", alt: { en: "Portrait of Riki Imamura", ja: "RIKI IMAMURA のポートレート" } }
+  portrait: null,
 
-  // 段落ごとに "..." を並べます（仮テキスト）
   biography: {
     en: [
-      "Riki Imamura is a student working across fashion design and digital fabrication.",
-      "The practice centres on garments made with 3D printing, the development of original structural systems for clothing, and research into digital fabrication techniques — treating structure, material and pattern as a single design problem.",
+      "My work explores new ways of making clothes through fashion design and digital fabrication.",
+      "Focusing on 3D printing, structural experimentation, and digital manufacturing processes, I investigate new possibilities for garment design and production.",
     ],
     ja: [
-      "ファッションデザインとデジタルファブリケーションを軸に活動する学生。",
-      "3Dプリントによる衣服制作、衣服のための独自構造の開発、デジタルファブリケーション技術の研究に取り組み、構造・素材・パターンをひとつのデザインとして捉え直している。",
+      "3Dプリント技術を活用した衣服・プロダクトの制作と、デジタルファブリケーションによる新しい衣服の製造方法の探究に取り組んでいます。",
+      "衣服のパターン設計、素材、構造、製造工程を横断し、従来の衣服製造にとらわれないデザインと技術の可能性を追求しています。",
     ],
   },
 
-  // { year, title, detail } の形で追加（仮の項目です。確定した情報に差し替えてください）
+  // 学歴（時系列順）
+  //   date   年月と状態（卒業・入学など）
+  //   title  学校の正式名称
+  //   detail 学科・課程などの正式名称
+  //   note   在学状況など（不要なら省略）
   education: [
     {
-      year: "20XX–",
-      title: { en: "University / School name", ja: "大学・学校名" },
-      detail: { en: "Department, Program — to be updated", ja: "学部・学科（更新予定）" },
+      date: { en: "March 2025 — Graduated", ja: "2025年3月 — 卒業" },
+      title: { en: "National Institute of Technology (KOSEN), Ariake College", ja: "有明工業高等専門学校" },
+      detail: { en: "Department of Creative Engineering, Life and Environmental Science Course", ja: "創造工学科 環境生命コース" },
+    },
+    {
+      date: { en: "April 2025 — Enrolled", ja: "2025年4月 — 入学" },
+      title: { en: "Bunka Fashion College", ja: "文化服装学院" },
+      detail: { en: "Fashion Creation Department, Garment Creation", ja: "服飾専門課程 服装科" },
+      note: { en: "Currently enrolled", ja: "現在在学中" },
+    },
+    {
+      date: { en: "April 2026 — Transferred into the third year", ja: "2026年4月 — 3年次編入学" },
+      title: { en: "The Open University of Japan", ja: "放送大学" },
+      detail: { en: "Faculty of Liberal Arts, Department of Liberal Arts, Nature and Environment", ja: "教養学部 教養学科 自然と環境コース" },
+      note: { en: "Currently enrolled", ja: "現在在学中" },
     },
   ],
 
-  // 受賞歴：結果が公表されたものだけを追加します
-  // 例: { year: "2026", title: { en: "Award name", ja: "賞の名称" }, detail: { en: "Grand Prix — Work title", ja: "グランプリ — 作品名" }, url: "https://..." },
-  awards: [],
+  fieldsOfInterest: {
+    en: ["Fashion Design", "Digital Fabrication", "Circular Design"],
+    ja: ["ファッションデザイン", "デジタルファブリケーション", "サーキュラーデザイン"],
+  },
+
+  // 受賞・選考歴
+  //   year   活動年（コンテスト名の年ではなく、活動した年）
+  //   title  コンテストの正式名称
+  //   status 選考状況。公式発表があったら、ここだけを書き換えます
+  //          （公表前の結果や賞名は書かないでください）
+  //   url    公式ページなど（任意）
+  awards: [
+    {
+      year: "2026",
+      title: { en: "The 26th YKK FASTENING AWARDS", ja: "第26回 YKKファスニングアワード" },
+      status: { en: "Selected (Final awards pending)", ja: "入選（最終結果発表待ち）" },
+    },
+    {
+      year: "2026",
+      title: { en: "Japan Leather Award 2026", ja: "ジャパンレザーアワード2026" },
+      status: { en: "Selected Work (Final awards pending)", ja: "入賞（最終結果発表待ち）" },
+    },
+    {
+      year: "2026",
+      title: { en: "Nippori Fashion Design Contest 2026", ja: "日暮里ファッションデザインコンテスト2026" },
+      status: { en: "Selected (Final results pending)", ja: "入選（最終結果発表待ち）" },
+    },
+    {
+      year: "2026",
+      title: "Next Fashion Designer of Tokyo 2027",
+      status: { en: "Passed the First Screening (Work in progress)", ja: "一次審査通過（作品制作中）" },
+    },
+  ],
 
   // 展示歴（任意）
   exhibitions: [],
-
-  researchInterests: {
-    en: [
-      "3D printing for garments",
-      "Original structural systems for clothing",
-      "Digital fabrication techniques",
-      "Fashion design and material experimentation",
-    ],
-    ja: [
-      "3Dプリントによる衣服制作",
-      "衣服のための独自構造",
-      "デジタルファブリケーション技術",
-      "ファッションデザインと素材の実験",
-    ],
-  },
 
   // 論文・発表（任意）
   // 例: { year: "2027", title: "Paper title", detail: { en: "Conference / Journal", ja: "学会・論文誌名" }, url: "https://..." },

@@ -21,7 +21,7 @@ portfolio/
 │   └── works.js        作品データ（一覧と詳細ページの元データ）
 ├── images/
 │   ├── works/<作品ID>/ 作品ごとの画像（cover / hero / process-xx / gallery-xx）
-│   └── about/          プロフィール写真
+│   └── about/          プロフィール写真（載せる場合に作成し、profile.js の portrait に指定）
 ├── assets/
 │   ├── css/style.css   デザイン
 │   ├── css/fonts.css   和文フォントの読み込み（自動生成）

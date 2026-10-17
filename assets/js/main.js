@@ -83,6 +83,8 @@
         </section>`
       : "";
 
+  // 経歴の一覧：{ year | date, title, detail, status, note, url }
+  // date（例「2025年3月 — 卒業」）があるものは、年の列ではなくタイトルの上に表示する
   function records(items) {
     items = list(items);
     if (!items.length) return "";
@@ -90,11 +92,15 @@
       .map((r) => {
         const t = esc(tr(r.title));
         const title = r.url ? `<a class="text-link" href="${esc(r.url)}"${linkAttrs(r.url)}>${t}</a>` : t;
-        const detail = tr(r.detail);
-        return `<li>
-          <span class="records__year">${esc(r.year)}</span>
+        const lines = [...list(r.detail), tr(r.status), tr(r.note)]
+          .filter(Boolean)
+          .map((d) => `<span class="records__detail">${esc(tr(d))}</span>`)
+          .join("");
+        const date = tr(r.date);
+        return `<li${date ? ' class="is-stacked"' : ""}>
+          ${date ? `<span class="records__date">${esc(date)}</span>` : `<span class="records__year">${esc(r.year)}</span>`}
           <span class="records__title">${title}</span>
-          ${detail ? `<span class="records__detail">${esc(detail)}</span>` : ""}
+          ${lines}
         </li>`;
       })
       .join("")}</ul>`;
@@ -172,7 +178,7 @@
       .join("");
     footer.innerHTML = `
       <p>&copy; ${new Date().getFullYear()} ${esc(SITE.name)}</p>
-      <ul class="site-footer__links">${links}</ul>`;
+      ${links ? `<ul class="site-footer__links">${links}</ul>` : ""}`;
   }
 
   header.addEventListener("click", (e) => {
@@ -310,11 +316,10 @@
   function renderAbout(main) {
     const p = PROFILE;
     const portrait = toImage(p.portrait);
-    const field = tr(p.field || SITE.field);
     setPageMeta(`${ui("about")} — ${SITE.name}`, list(p.biography)[0] || tr(SITE.description));
 
-    const interests = list(p.researchInterests).length
-      ? `<ul class="plain-list">${list(p.researchInterests).map((r) => `<li>${esc(tr(r))}</li>`).join("")}</ul>`
+    const interests = list(p.fieldsOfInterest).length
+      ? `<ul class="plain-list">${list(p.fieldsOfInterest).map((r) => `<li>${esc(tr(r))}</li>`).join("")}</ul>`
       : "";
 
     main.innerHTML = `
@@ -323,14 +328,13 @@
         ${portrait ? `<figure class="about-intro__portrait">${img(portrait, { eager: true })}</figure>` : ""}
         <dl class="profile">
           <div><dt class="label">${esc(ui("name"))}</dt><dd>${esc(tr(p.name) || SITE.name)}</dd></div>
-          <div><dt class="label">${esc(ui("field"))}</dt><dd>${esc(field)}</dd></div>
         </dl>
       </section>
       ${block(ui("biography"), prose(p.biography))}
       ${block(ui("education"), records(p.education))}
-      ${block(ui("awards"), records(p.awards))}
+      ${block(ui("fieldsOfInterest"), interests)}
+      ${block(ui("awardsSelections"), records(p.awards))}
       ${block(ui("exhibitions"), records(p.exhibitions))}
-      ${block(ui("researchInterests"), interests)}
       ${block(ui("publications"), records(p.publications))}
       ${customSections(p.sections)}`;
 
@@ -339,7 +343,7 @@
       const ld = document.createElement("script");
       ld.type = "application/ld+json";
       ld.id = "person-ld";
-      const f = p.field || SITE.field;
+      const f = SITE.field;
       ld.textContent = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Person",
@@ -373,7 +377,7 @@
 
     main.innerHTML = `
       <header class="page-head"><h1 class="page-title">${esc(ui("contact"))}</h1></header>
-      ${block(ui("inquiries"), `${prose(c.intro)}<ul class="contact-list">${items}</ul>`)}`;
+      ${block(ui("inquiries"), `${prose(c.intro)}<ul class="contact-list">${items}</ul>${prose(c.note, "prose contact-note")}`)}`;
   }
 
   /* ---------- images ---------- */

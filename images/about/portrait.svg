@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2000" viewBox="0 0 1600 2000">
-<defs><pattern id="p" width="96.0" height="96.0" patternUnits="userSpaceOnUse"><circle cx="48.0" cy="48.0" r="4.8" fill="#cfcdc7"/><path d="M0,48.0 H96.0" stroke="#cfcdc7" stroke-width="1.4" opacity=".6"/></pattern></defs>
-<rect width="1600" height="2000" fill="#e8e7e3"/>
-<rect x="192" y="192" width="1216" height="1616" fill="url(#p)"/>
-<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="35" fill="#9b9993" letter-spacing="6.3">
-<text x="192" y="1890">RIKI IMAMURA — PORTRAIT</text>
-<text x="192" y="1967">4:5 PLACEHOLDER</text>
-</g>
-</svg>
