@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1400" viewBox="0 0 2100 1400">
+<defs><pattern id="p" width="201.6" height="134.4" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="201.6" height="134.4" fill="none" stroke="#cfcdc7" stroke-width="2.5" stroke-dasharray="10.1 8.4"/><path d="M0,134.4 L201.6,0" stroke="#cfcdc7" stroke-width="2.5"/></pattern></defs>
+<rect width="2100" height="1400" fill="#f3f2ef"/>
+<rect x="168" y="168" width="1764" height="1064" fill="url(#p)"/>
+<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="31" fill="#9b9993" letter-spacing="5.5">
+<text x="168" y="1304">ZERO CUT PATTERN — PROCESS-01</text>
+<text x="168" y="1371">3:2 PLACEHOLDER</text>
+</g>
+</svg>

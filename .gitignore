@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (tools/ uses no dependencies, but just in case)
+node_modules/
+
+# 元データ（大きな未加工ファイルはここに置けば公開されません）
+_originals/
+*.psd
+*.ai
+*.3dm
+*.stl
+*.obj

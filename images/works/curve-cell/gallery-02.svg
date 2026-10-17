@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2000" viewBox="0 0 1600 2000">
+<defs><pattern id="p" width="384.0" height="86.4" patternUnits="userSpaceOnUse"><path d="M0,43.2 Q96.0,0 192.0,43.2 T384.0,43.2" fill="none" stroke="#cfcdc7" stroke-width="2.9"/></pattern></defs>
+<rect width="1600" height="2000" fill="#e4e3df"/>
+<rect x="192" y="192" width="1216" height="1616" fill="url(#p)"/>
+<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="35" fill="#9b9993" letter-spacing="6.3">
+<text x="192" y="1890">CURVE CELL — GALLERY-02</text>
+<text x="192" y="1967">4:5 PLACEHOLDER</text>
+</g>
+</svg>
