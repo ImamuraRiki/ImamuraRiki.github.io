@@ -29,7 +29,7 @@ portfolio/
 │   ├── js/main.js      表示処理・言語切り替え（通常は編集不要）
 │   └── img/favicon.svg
 ├── tools/
-│   ├── make-sitemap.mjs   sitemap.xml / robots.txt を作り直す
+│   ├── build.mjs          HTML の検索エンジン向け情報・sitemap.xml・robots.txt を作り直す
 │   └── subset-font.py     和文Webフォントを作り直す（通常は不要）
 ├── sitemap.xml / robots.txt 検索エンジン向け
 └── .nojekyll           GitHub Pages 用の設定
@@ -57,7 +57,7 @@ python3 -m http.server 8000
 
 1. `images/works/<作品ID>/` フォルダを作り、画像を入れる（例: `images/works/new-work/cover.jpg`）
 2. `data/works.js` の作品ブロックを1つコピーして貼り付け、内容を書き換える
-3. `node tools/make-sitemap.mjs` を実行（sitemap.xml の更新。Node.js が必要）
+3. `node tools/build.mjs` を実行（HTML の検索エンジン向け情報と sitemap.xml の更新。Node.js が必要）
 4. ローカルで確認して、GitHub に反映（下記「公開後の更新」）
 
 - 並び順は `works.js` に書いた順番です。
@@ -79,6 +79,14 @@ python3 -m http.server 8000
   - Webフォントとして同梱しています。JIS第1・第2水準の文字に絞り、文字種ごとに3ファイルに分割しているため、ページで使われた分だけが読み込まれます（英語表示では読み込まれません）。
   - OFL の規定で、改変（サブセット化）したフォントには予約名「Source」を使えないため、フォント内部名は「Han Sans JP Web」に変更しています。著作権表示とライセンスはそのまま保持し、`assets/fonts/source-han-sans-jp/LICENSE.txt` を同梱しています。
   - 閲覧者の端末に源ノ角ゴシックがインストールされている場合は、そちらが使われます。
+
+## 検索エンジン（SEO）
+
+- ページのタイトルと説明文は `data/site.js` の `seo` で管理しています（日本語名・英語名の両方を含め、言語切り替えに関係なく固定）。
+- 各 HTML の `<head>`（タイトル・説明文・canonical・構造化データ）と `<main>` 内の要約は `node tools/build.mjs` が data/ から生成します。
+  `data/` を編集したら実行してください（HTML を手で直接編集すると、次の実行で上書きされます）。
+- `<main>` 内の要約は JavaScript を実行しない検索エンジン向けで、ブラウザでは main.js の表示に置き換わります。
+- Google Search Console の所有権確認ファイル（`google〜.html`）は、このフォルダの直下に置いてコミットします。
 
 ## 公開後の更新
 

@@ -1,7 +1,7 @@
 /*
  * ABOUT ページの内容
  * ------------------------------------------------------------
- * 表示順：Biography → Education → Fields of Interest → Awards & Selections
+ * 表示順：プロフィール（名前・生年月日・年齢・略歴）→ Education → Awards & Selections
  * 文章は { en: "英語", ja: "日本語" } の形で書くと EN / JP 切り替えに対応します。
  * 項目が空（[]）のセクションは自動で非表示になります。
  * 公開前の受賞結果や、確認できていない経歴は載せないでください。
@@ -15,14 +15,13 @@ window.PROFILE = {
   // 写真を載せる場合：{ src: "images/about/portrait.jpg", alt: { en: "Portrait of Riki Imamura", ja: "RIKI IMAMURA のポートレート" } }
   portrait: null,
 
+  // 略歴（名前・生年月日・年齢の下に表示。構造化データの説明文にも英語版を使用）
   biography: {
     en: [
-      "My work explores new ways of making clothes through fashion design and digital fabrication.",
-      "Focusing on 3D printing, structural experimentation, and digital manufacturing processes, I investigate new possibilities for garment design and production.",
+      "Riki Imamura is a student at Bunka Fashion College and the Open University of Japan. His work explores sustainable fashion through technology, focusing on the design of 3D-printed garments and products, as well as new approaches to clothing production. His projects have received recognition in multiple fashion design competitions in Japan.",
     ],
     ja: [
-      "3Dプリント技術を活用した衣服・プロダクトの制作と、デジタルファブリケーションによる新しい衣服の製造方法の探究に取り組んでいます。",
-      "衣服のパターン設計、素材、構造、製造工程を横断し、従来の衣服製造にとらわれないデザインと技術の可能性を追求しています。",
+      "今村吏希は、文化服装学院と放送大学に在学する学生。テクノロジーを活用したサステナブルなファッションに関心を持ち、現在は3Dプリント技術による衣服やプロダクトのデザインと、新しい製造方法の探究に取り組んでいる。これまでに国内の複数のファッションコンテストで入賞・入選している。",
     ],
   },
 
@@ -50,11 +49,6 @@ window.PROFILE = {
       note: { en: "Currently enrolled", ja: "現在在学中" },
     },
   ],
-
-  fieldsOfInterest: {
-    en: ["Fashion Design", "Digital Fabrication", "Circular Design"],
-    ja: ["ファッションデザイン", "デジタルファブリケーション", "サーキュラーデザイン"],
-  },
 
   // 受賞・選考歴
   //   year   活動年（コンテスト名の年ではなく、活動した年）

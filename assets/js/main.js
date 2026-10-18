@@ -162,10 +162,24 @@
     if (path != null && SITE.baseUrl) {
       const url = SITE.baseUrl.replace(/\/?$/, "/") + path;
       setMeta("property", "og:url", url);
-      const canonical = document.head.querySelector('link[rel="canonical"]');
-      if (canonical) canonical.href = url;
+      // work.html は ?id= ごとに URL が変わるため、HTML には canonical を書かずここで追加する
+      let canonical = document.head.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.rel = "canonical";
+        document.head.appendChild(canonical);
+      }
+      canonical.href = url;
     }
   }
+
+  // 検索エンジン向けのタイトル・説明文（data/site.js の seo。言語切り替えに関係なく固定）
+  const SEO = SITE.seo || {};
+  const siteName = SEO.siteName || SITE.name;
+  const seoMeta = (id, path) => {
+    const m = (SEO.pages && SEO.pages[id]) || {};
+    setPageMeta(m.title || siteName, m.description, path);
+  };
 
   /* ---------- header / footer ---------- */
 
@@ -222,7 +236,7 @@
   /* ---------- WORKS (index) ---------- */
 
   function renderWorks(main) {
-    setPageMeta(`${SITE.name} — ${tr(SITE.field)}`, tr(SITE.description));
+    seoMeta("works", "");
 
     const cards = WORKS.map((w, i) => {
       const cover = toImage(w.cover) || toImage(w.hero) || {};
@@ -238,7 +252,7 @@
     }).join("");
 
     main.innerHTML = `
-      <h1 class="visually-hidden">${esc(SITE.name)} — ${esc(tr(SITE.field))}</h1>
+      <h1 class="visually-hidden">${esc(SITE.nameJa)} / ${esc(SITE.name)} — ${esc(tr(SITE.field))}</h1>
       <section class="projects" aria-labelledby="projects-title">
         <header class="page-head"><h2 class="page-title" id="projects-title">${esc(ui("projects"))}</h2></header>
         <ul class="work-grid">${cards}</ul>
@@ -255,7 +269,7 @@
     const w = WORKS[index];
     const title = workTitle(w);
     const hero = toImage(w.hero) || toImage(w.cover);
-    setPageMeta(`${title} — ${SITE.name}`, tr(w.summary) || list(w.concept)[0], workUrl(w));
+    setPageMeta(`${title} — ${siteName}`, tr(w.summary) || list(w.concept)[0], workUrl(w));
 
     const process = list(w.process).length
       ? `<ol class="process">${list(w.process)
@@ -325,7 +339,7 @@
   }
 
   function renderNotFound(main) {
-    setPageMeta(`${ui("notFound")} — ${SITE.name}`);
+    setPageMeta(`${ui("notFound")} — ${siteName}`);
     setMeta("name", "robots", "noindex");
     main.innerHTML = `
       <header class="page-head">
@@ -341,58 +355,37 @@
     const p = PROFILE;
     const portrait = toImage(p.portrait);
     const birth = parseDate(p.birthDate);
-    setPageMeta(`${ui("about")} — ${SITE.name}`, list(p.biography)[0] || tr(SITE.description));
-
-    const interests = list(p.fieldsOfInterest).length
-      ? `<ul class="plain-list">${list(p.fieldsOfInterest).map((r) => `<li>${esc(tr(r))}</li>`).join("")}</ul>`
-      : "";
+    seoMeta("about", "about.html");
 
     main.innerHTML = `
       <header class="page-head"><h1 class="page-title">${esc(ui("about"))}</h1></header>
       <section class="about-intro${portrait ? "" : " about-intro--text"}">
         ${portrait ? `<figure class="about-intro__portrait">${img(portrait, { eager: true })}</figure>` : ""}
-        <dl class="profile">
-          <div class="profile__name"><dt class="label">${esc(ui("name"))}</dt><dd>${personName(tr(p.name) || SITE.name, p.nameJa || SITE.nameJa, "profile-name")}</dd></div>
-          ${
-            birth
-              ? `<div><dt class="label">${esc(ui("dateOfBirth"))}</dt><dd><time datetime="${esc(p.birthDate)}">${esc(formatDate(birth))}</time></dd></div>
-                 <div><dt class="label">${esc(ui("age"))}</dt><dd>${esc(ui("ageValue").replace("{n}", ageOn(birth)))}</dd></div>`
-              : ""
-          }
-        </dl>
+        <div class="about-intro__body">
+          <dl class="profile">
+            <div class="profile__name"><dt class="label">${esc(ui("name"))}</dt><dd>${personName(tr(p.name) || SITE.name, p.nameJa || SITE.nameJa, "profile-name")}</dd></div>
+            ${
+              birth
+                ? `<div><dt class="label">${esc(ui("dateOfBirth"))}</dt><dd><time datetime="${esc(p.birthDate)}">${esc(formatDate(birth))}</time></dd></div>
+                   <div><dt class="label">${esc(ui("age"))}</dt><dd>${esc(ui("ageValue").replace("{n}", ageOn(birth)))}</dd></div>`
+                : ""
+            }
+          </dl>
+          ${prose(p.biography, "prose about-bio")}
+        </div>
       </section>
-      ${block(ui("biography"), prose(p.biography))}
       ${block(ui("education"), records(p.education))}
-      ${block(ui("fieldsOfInterest"), interests)}
       ${block(ui("awardsSelections"), records(p.awards))}
       ${block(ui("exhibitions"), records(p.exhibitions))}
       ${block(ui("publications"), records(p.publications))}
       ${customSections(p.sections)}`;
-
-    // 検索エンジン向けの人物情報（英語で固定）
-    if (!document.getElementById("person-ld")) {
-      const ld = document.createElement("script");
-      ld.type = "application/ld+json";
-      ld.id = "person-ld";
-      const f = SITE.field;
-      ld.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: SITE.name,
-        alternateName: SITE.nameJa,
-        jobTitle: (f && f.en) || f,
-        url: SITE.baseUrl,
-        sameAs: (SITE.contact && SITE.contact.items ? SITE.contact.items : []).map((c) => c.href).filter(isExternal),
-      });
-      document.head.appendChild(ld);
-    }
   }
 
   /* ---------- CONTACT ---------- */
 
   function renderContact(main) {
     const c = SITE.contact || {};
-    setPageMeta(`${ui("contact")} — ${SITE.name}`, tr(c.intro));
+    seoMeta("contact", "contact.html");
     const items = list(c.items)
       .map((i) => {
         const value = esc(tr(i.value));

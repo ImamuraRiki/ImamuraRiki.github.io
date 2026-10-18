@@ -13,13 +13,32 @@ window.SITE = {
     ja: "ファッションデザイン / デジタルファブリケーション",
   },
 
-  // 検索結果・SNSシェア時の説明文
-  description: {
-    en: "Portfolio of Riki Imamura, working across fashion design and digital fabrication: 3D-printed garments, structural development, and fabrication research.",
-    ja: "ファッションデザインとデジタルファブリケーションを軸に活動する RIKI IMAMURA のポートフォリオ。3Dプリントによる衣服、独自構造の開発、デジタルファブリケーション研究。",
+  // 検索エンジン・SNSシェア用の設定（日本語名と英語名の両方で見つけてもらうため、言語切り替えに関係なく固定）
+  // 変更したら node tools/build.mjs を実行して、HTML・sitemap.xml に反映します
+  seo: {
+    siteName: "今村吏希 | Riki Imamura", // ブラウザのタブ・検索結果のタイトルに使う名前
+    personName: "Riki Imamura", // 構造化データ（Person）の名前
+    alternateNames: ["今村吏希", "RIKI IMAMURA"],
+    knowsAbout: ["Fashion Design", "Digital Fabrication", "3D Printing", "Sustainable Fashion"],
+    pages: {
+      works: {
+        title: "今村吏希 | Riki Imamura — Fashion Design / Digital Fabrication",
+        description:
+          "今村吏希（Riki Imamura）のポートフォリオ。3Dプリントによる衣服やプロダクトのデザインと、新しい製造方法を探究しています。Portfolio of Riki Imamura: Fashion Design, Digital Fabrication, 3D Printing and Sustainable Fashion.",
+      },
+      about: {
+        title: "About — 今村吏希 | Riki Imamura",
+        description:
+          "今村吏希（Riki Imamura）のプロフィール。文化服装学院・放送大学在学。テクノロジーを活用したサステナブルなファッションに関心を持つ。Profile of Riki Imamura: Fashion Design, Digital Fabrication, 3D Printing and Sustainable Fashion.",
+      },
+      contact: {
+        title: "Contact — 今村吏希 | Riki Imamura",
+        description: "今村吏希（Riki Imamura）へのお問い合わせ。Contact Riki Imamura — Fashion Design and Digital Fabrication portfolio.",
+      },
+    },
   },
 
-  // 公開URL（変更したら tools/make-sitemap.mjs を実行）
+  // 公開URL（変更したら node tools/build.mjs を実行）
   baseUrl: "https://imamurariki.github.io/",
 
   // ヘッダーのナビゲーション（ページを増やすときはここに追加）
