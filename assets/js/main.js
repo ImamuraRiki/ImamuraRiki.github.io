@@ -48,7 +48,7 @@
   const photosOf = (w) => ((window.PHOTOS || {})[w.id] || []).map((src) => ({ src }));
   const workUrl = (w) => `work.html?id=${encodeURIComponent(w.id)}`;
   const isExternal = (href) => /^https?:\/\//.test(href || "");
-  const linkAttrs = (href) => (isExternal(href) ? ' target="_blank" rel="noopener"' : "");
+  const linkAttrs = (href) => (isExternal(href) ? ' target="_blank" rel="noopener noreferrer"' : "");
 
   const prose = (v, cls = "prose") => {
     const ps = list(v);

@@ -441,8 +441,18 @@ main:focus {
 
 /* ---------- PROJECT DETAIL ---------- */
 
+/* 詳細ページの余白（セクション間・画像・前後ナビゲーションで共通） */
+[data-page="work"] {
+  --work-space: clamp(36px, 4.5vw, 64px);
+}
+
+[data-page="work"] .block {
+  gap: 12px;
+  padding: var(--work-space) 0;
+}
+
 .work-head {
-  padding: clamp(28px, 5vw, 72px) 0 clamp(20px, 3vw, 40px);
+  padding: clamp(28px, 5vw, 72px) 0 clamp(16px, 2vw, 28px);
 }
 
 .back-link {
@@ -456,7 +466,7 @@ main:focus {
 }
 
 .work-year {
-  margin-top: 4px;
+  margin-top: 2px;
   color: var(--muted);
   font-size: var(--fs-s);
   font-variant-numeric: tabular-nums;
@@ -464,7 +474,7 @@ main:focus {
 
 /* メイン画像：本来の縦横比のまま、縦長・横長どちらも画面内に収める */
 .work-hero {
-  margin-bottom: var(--space-section);
+  margin-bottom: var(--work-space);
 }
 
 .work-hero .zoom {
@@ -491,16 +501,23 @@ figcaption {
   color: var(--muted);
 }
 
+/* 詳細ページの項目は罫線で区切らず、余白で分ける */
 .specs > div {
   display: grid;
   grid-template-columns: minmax(7em, 1fr) 2fr;
   gap: 16px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--line);
 }
 
-.specs > div:first-child {
-  border-top: 1px solid var(--line);
+.specs > div + div,
+.work .records li + li,
+.links li + li {
+  margin-top: 14px;
+}
+
+.work .records li,
+.work .records li:first-child {
+  padding: 0;
+  border: 0;
 }
 
 .specs dt {
@@ -510,13 +527,13 @@ figcaption {
 
 /* 下部の作品画像（見出しなし） */
 .work-photos {
-  padding: var(--space-section) 0;
+  padding: var(--work-space) 0;
   border-top: 1px solid var(--line);
 }
 
 .gallery {
   display: grid;
-  gap: clamp(16px, 2.4vw, 40px);
+  gap: clamp(12px, 1.8vw, 28px);
 }
 
 @media (min-width: 760px) {
@@ -599,12 +616,6 @@ figcaption {
 .links li {
   display: grid;
   gap: 2px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.links li:first-child {
-  border-top: 1px solid var(--line);
 }
 
 .links__detail {
@@ -616,6 +627,14 @@ figcaption {
   margin-top: 48px;
 }
 
+.work .records-group + .records-group {
+  margin-top: 32px;
+}
+
+[data-page="work"] .site-footer {
+  padding-top: clamp(56px, 7vw, 104px);
+}
+
 .records-group > .label {
   display: block;
   margin-bottom: 12px;
@@ -625,7 +644,7 @@ figcaption {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  padding: var(--space-section) 0 0;
+  padding: var(--work-space) 0 0;
   border-top: 1px solid var(--line);
 }
 
@@ -638,13 +657,14 @@ figcaption {
   text-align: right;
 }
 
+/* 作品名は一覧のキャプションと同じ大きさ */
 .pager__title {
   display: block;
-  margin-top: 8px;
-  font-size: var(--fs-l);
+  margin-top: 6px;
+  font-size: var(--fs-s);
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
   overflow-wrap: anywhere;
   transition: opacity 0.3s;
 }

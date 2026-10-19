@@ -37,7 +37,7 @@
  *                 data      3Dデータ [{ title, url, file, description, license }]
  *                             url = 外部の公開ページ / file = このサイト内のファイル（例 "files/leather-cell-vest/vest.stl"）
  *                             空 [] のときは「公開準備中 / Coming soon」と表示
- *                 articles  掲載記事・外部リンク [{ title, source, url }]
+ *                 articles  掲載歴（掲載記事・外部リンク） [{ title, source, url }]
  *                             空 [] のとき、または url がないときは「追加予定 / To be added」と表示
  *   draft       true にすると非公開（一覧・詳細に出ません）
  */
@@ -69,7 +69,12 @@ window.WORKS = [
     awards: [{ id: "japan-leather-award-2026" }],
     links: {
       data: [],
-      articles: [],
+      articles: [
+        {
+          title: { en: "Japan Leather Award 2026 — Project Page", ja: "ジャパンレザーアワード2026 作品掲載ページ" },
+          url: "https://award.jlia.or.jp/2026/list/detail.php?no=J26A-0494",
+        },
+      ],
     },
   },
 
