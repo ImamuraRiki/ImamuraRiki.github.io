@@ -132,8 +132,9 @@ ${list(PROFILE.biography).map((p) => `    <p>${esc(p)}</p>`).join("\n")}
     ${recordsHtml(PROFILE.awards)}`,
   contact: `<h1>${esc(ui("contact"))}</h1>
 ${list([en(SITE.contact.intro)]).map((p) => `    <p>${esc(p)}</p>`).join("\n")}
-${SITE.contact.items.map((i) => `    <p>${esc(en(i.label))}: ${esc(en(i.value))}</p>`).join("\n")}
-    <p>${esc(en(SITE.contact.note))}</p>`,
+${SITE.contact.items
+  .map((i) => `    <p>${esc(en(i.label))}: ${i.href ? `<a href="${esc(i.href)}">${esc(en(i.value))}</a>` : esc(en(i.value))}</p>`)
+  .join("\n")}${SITE.contact.note ? `\n    <p>${esc(en(SITE.contact.note))}</p>` : ""}`,
   work: `<h1>${esc(ui("projects"))}</h1>
     <ul>
 ${WORKS.map((w) => `      <li><a href="${workUrl(w)}">${esc(workTitle(w))}</a></li>`).join("\n")}

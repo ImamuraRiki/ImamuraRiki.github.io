@@ -53,12 +53,15 @@ window.SITE = {
       en: "For inquiries, please contact me at the email address below.",
       ja: "お問い合わせは、以下のメールアドレスまでご連絡ください。",
     },
-    // 連絡先。迷惑メール対策のため、メールアドレスは "()" 表記のまま・リンクなし（href なし）で表示します。
-    // SNS などを追加する場合は { label, value, href } を追加します（href があるものはフッターにも表示。footer: false で非表示）。
-    items: [{ label: { en: "Email", ja: "メール" }, value: "rk30.8se()icloud.com" }],
-    note: {
-      en: "Please replace “()” with “@” when sending an email.",
-      ja: "送信時は「()」を「@」に置き換えてください。",
-    },
+    // 連絡先 { label, value, href }。href があるものはリンクになり、フッターにも表示されます（footer: false で非表示）。
+    // note: { en, ja } を書くと、一覧の下に補足として表示されます。
+    items: [
+      {
+        label: { en: "Email", ja: "メール" },
+        value: "imamurariki.jp@gmail.com",
+        href: "mailto:imamurariki.jp@gmail.com",
+        footer: false,
+      },
+    ],
   },
 };
