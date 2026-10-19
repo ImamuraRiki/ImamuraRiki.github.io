@@ -1,10 +1,11 @@
-// HTML（各ページの <head> と検索エンジン向けの本文）・sitemap.xml・robots.txt を data/ の内容から作り直します。
+// 作品写真のコピー・HTML（各ページの <head> と検索エンジン向けの本文）・sitemap.xml・robots.txt を
+// data/ の内容から作り直します。
 // 使い方（portfolio フォルダで）: node tools/build.mjs
 //
 // ページの本文は assets/js/main.js が表示します。ここで <main> に書き込むのは、
 // JavaScript を実行しない検索エンジンやリンクプレビュー向けの英語の要約で、
 // ブラウザでは main.js がすぐに同じ内容の表示に置き換えます（画面に二重には出ません）。
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, copyFileSync, rmSync } from "node:fs";
 import vm from "node:vm";
 
 const root = new URL("../", import.meta.url);
@@ -17,6 +18,36 @@ const { SITE, I18N, PROFILE, WORKS: ALL_WORKS } = ctx.window;
 const WORKS = ALL_WORKS.filter((w) => w && w.id && !w.draft);
 const SEO = SITE.seo;
 const base = SITE.baseUrl.replace(/\/?$/, "/");
+
+/* ---------- work photos ---------- */
+
+// works.js の photoDir（例 photo/L）の画像を images/works/<id>/photos/ にコピーし、
+// ファイル名順の一覧を data/photos.js に書き出す。元フォルダのファイルは読むだけで変更しない。
+// （photo/ は Git に含めないため、元フォルダがない環境では公開用フォルダの中身をそのまま使う）
+const IMAGE = /\.(jpe?g|png|webp)$/i;
+const byName = (a, b) => a.localeCompare(b, "en", { numeric: true });
+const sameFile = (a, b) => existsSync(b) && readFileSync(a).equals(readFileSync(b));
+const PHOTOS = {};
+for (const w of WORKS) {
+  const dest = `images/works/${w.id}/photos/`;
+  const destUrl = new URL(dest, root);
+  if (w.photoDir && existsSync(new URL(w.photoDir.replace(/\/?$/, "/"), root))) {
+    const srcUrl = new URL(w.photoDir.replace(/\/?$/, "/"), root);
+    const files = readdirSync(srcUrl).filter((f) => IMAGE.test(f));
+    mkdirSync(destUrl, { recursive: true });
+    for (const f of files) {
+      if (!sameFile(new URL(f, srcUrl), new URL(f, destUrl))) copyFileSync(new URL(f, srcUrl), new URL(f, destUrl));
+    }
+    // 元フォルダから消えた写真は公開用フォルダからも消す（公開用のコピーだけが対象）
+    for (const f of readdirSync(destUrl)) if (IMAGE.test(f) && !files.includes(f)) rmSync(new URL(f, destUrl));
+  }
+  const list = existsSync(destUrl) ? readdirSync(destUrl).filter((f) => IMAGE.test(f)).sort(byName) : [];
+  if (list.length) PHOTOS[w.id] = list.map((f) => dest + f);
+}
+writeFileSync(
+  new URL("data/photos.js", root),
+  `// 自動生成（node tools/build.mjs）。編集しないでください。作品ごとの写真一覧（01 がメイン画像）\nwindow.PHOTOS = ${JSON.stringify(PHOTOS, null, 2)};\n`
+);
 
 const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ESC[c]);
@@ -112,11 +143,11 @@ ${WORKS.map((w) => `      <li><a href="${workUrl(w)}">${esc(workTitle(w))}</a></
 /* ---------- pages ---------- */
 
 const pages = [
-  { file: "index.html", page: "works", data: "works", path: "", ...SEO.pages.works, ld: [website, person] },
-  { file: "about.html", page: "about", data: "profile", path: "about.html", ...SEO.pages.about, ld: [person, profilePage] },
+  { file: "index.html", page: "works", data: ["works", "photos"], path: "", ...SEO.pages.works, ld: [website, person] },
+  { file: "about.html", page: "about", data: ["profile"], path: "about.html", ...SEO.pages.about, ld: [person, profilePage] },
   { file: "contact.html", page: "contact", path: "contact.html", ...SEO.pages.contact },
   // 作品詳細は ?id= ごとに URL が変わるので canonical とタイトルは main.js が設定する
-  { file: "work.html", page: "work", nav: "works", data: "works", path: null, title: `${ui("projects")} — ${SEO.siteName}`, description: SEO.pages.works.description },
+  { file: "work.html", page: "work", nav: "works", data: ["profile", "works", "photos"], path: null, title: `${ui("projects")} — ${SEO.siteName}`, description: SEO.pages.works.description },
   {
     file: "404.html",
     page: "notfound",
@@ -161,7 +192,7 @@ ${p.noindex ? `  <base href="/">\n  <meta name="robots" content="noindex">\n` : 
   <script>try{if(localStorage.getItem("lang")==="ja")document.documentElement.lang="ja"}catch(e){}</script>
   <script defer src="data/site.js"></script>
   <script defer src="data/i18n.js"></script>
-${p.data ? `  <script defer src="data/${p.data}.js"></script>\n` : ""}  <script defer src="assets/js/main.js"></script>
+${(p.data || []).map((d) => `  <script defer src="data/${d}.js"></script>\n`).join("")}  <script defer src="assets/js/main.js"></script>
 ${p.ld ? jsonLd(p.ld) : ""}</head>
 <body data-page="${p.page}" data-nav="${p.nav != null ? p.nav : p.page}">
   <main id="main" tabindex="-1">
@@ -183,4 +214,5 @@ ${paths.map((p) => `  <url><loc>${esc(base + p)}</loc></url>`).join("\n")}
 `;
 writeFileSync(new URL("sitemap.xml", root), xml);
 writeFileSync(new URL("robots.txt", root), `User-agent: *\nAllow: /\n\nSitemap: ${base}sitemap.xml\n`);
+console.log(`photos: ${WORKS.map((w) => `${w.id} ${(PHOTOS[w.id] || []).length}`).join(", ")}`);
 console.log(`HTML: ${pages.map((p) => p.file).join(", ")}\nsitemap.xml: ${paths.length} URLs (${base})`);

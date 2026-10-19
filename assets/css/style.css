@@ -455,11 +455,32 @@ main:focus {
   color: var(--fg);
 }
 
-/* 縦長・横長どちらのメインビジュアルも画面内に収める */
-.work-hero img {
-  width: 100%;
+.work-year {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--fs-s);
+  font-variant-numeric: tabular-nums;
+}
+
+/* メイン画像：本来の縦横比のまま、縦長・横長どちらも画面内に収める */
+.work-hero {
+  margin-bottom: var(--space-section);
+}
+
+.work-hero .zoom {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.work-hero img,
+.work-hero .zoom img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
   max-height: 92vh;
-  object-fit: contain;
+  aspect-ratio: auto;
 }
 
 .work-hero figcaption,
@@ -468,45 +489,6 @@ figcaption {
   font-size: var(--fs-xs);
   letter-spacing: 0.04em;
   color: var(--muted);
-}
-
-.work-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px clamp(40px, 6vw, 96px);
-  padding: 24px 0 var(--space-section);
-}
-
-.work-meta dd {
-  margin-top: 2px;
-  font-size: var(--fs-s);
-}
-
-.process {
-  display: grid;
-  gap: clamp(40px, 5vw, 72px);
-}
-
-.process__step {
-  display: grid;
-  grid-template-columns: 3em minmax(0, 1fr);
-}
-
-.process__num {
-  font-size: var(--fs-s);
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.75;
-}
-
-.process__title {
-  margin-bottom: 6px;
-  font-size: var(--fs-m);
-  font-weight: 500;
-}
-
-.process__figure {
-  margin-top: 24px;
 }
 
 .specs > div {
@@ -524,6 +506,12 @@ figcaption {
 .specs dt {
   color: var(--muted);
   font-size: var(--fs-s);
+}
+
+/* 下部の作品画像（見出しなし） */
+.work-photos {
+  padding: var(--space-section) 0;
+  border-top: 1px solid var(--line);
 }
 
 .gallery {
@@ -604,6 +592,22 @@ figcaption {
 
 .records__date {
   margin-bottom: 2px;
+  color: var(--muted);
+  font-size: var(--fs-s);
+}
+
+.links li {
+  display: grid;
+  gap: 2px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.links li:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.links__detail {
   color: var(--muted);
   font-size: var(--fs-s);
 }

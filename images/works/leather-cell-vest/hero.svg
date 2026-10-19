@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="2000" viewBox="0 0 1500 2000">
-<defs><pattern id="p" width="155.9" height="270.0" patternUnits="userSpaceOnUse"><path d="M77.9,0 L155.9,45.0 L155.9,135.0 L77.9,180.0 L0,135.0 L0,45.0 Z M77.9,180.0 L77.9,270.0" fill="none" stroke="#cfcdc7" stroke-width="2.7"/></pattern></defs>
-<rect width="1500" height="2000" fill="#e8e7e3"/>
-<rect x="180" y="180" width="1140" height="1640" fill="url(#p)"/>
-<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="33" fill="#9b9993" letter-spacing="5.9">
-<text x="180" y="1897">LEATHER CELL VEST — HERO</text>
-<text x="180" y="1969">3:4 PLACEHOLDER</text>
-</g>
-</svg>

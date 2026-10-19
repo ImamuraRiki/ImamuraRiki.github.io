@@ -44,6 +44,8 @@
   const toImage = (v) => (typeof v === "string" ? { src: v } : v || null);
   // 作品名は固有名詞なので翻訳しない（{ en, ja } で書かれていても英語表記を使う）
   const workTitle = (w) => (typeof w.title === "string" ? w.title : (w.title && w.title.en) || "");
+  // 作品写真（tools/build.mjs が photoDir から作る data/photos.js）。01 がメイン画像
+  const photosOf = (w) => ((window.PHOTOS || {})[w.id] || []).map((src) => ({ src }));
   const workUrl = (w) => `work.html?id=${encodeURIComponent(w.id)}`;
   const isExternal = (href) => /^https?:\/\//.test(href || "");
   const linkAttrs = (href) => (isExternal(href) ? ' target="_blank" rel="noopener"' : "");
@@ -239,7 +241,7 @@
     seoMeta("works", "");
 
     const cards = WORKS.map((w, i) => {
-      const cover = toImage(w.cover) || toImage(w.hero) || {};
+      const cover = toImage(w.cover) || photosOf(w)[0] || {};
       return `<li class="work-card">
         <a class="work-card__link" href="${workUrl(w)}">
           <div class="work-card__media" style="--ratio: ${esc(w.coverRatio || "1 / 1")}; --position: ${esc(w.coverPosition || "50% 50%")}">${img(cover, { eager: i < 2 })}</div>
@@ -268,65 +270,36 @@
 
     const w = WORKS[index];
     const title = workTitle(w);
-    const hero = toImage(w.hero) || toImage(w.cover);
-    setPageMeta(`${title} — ${siteName}`, tr(w.summary) || list(w.concept)[0], workUrl(w));
+    const photos = photosOf(w);
+    const hero = photos[0];
+    setPageMeta(`${title} — ${siteName}`, tr(w.summary) || list(w.overview)[0], workUrl(w));
 
-    const process = list(w.process).length
-      ? `<ol class="process">${list(w.process)
-          .map(
-            (s, i) => `<li class="process__step">
-              <span class="process__num">${pad(i + 1)}</span>
-              <div class="process__body">
-                ${s.title ? `<h3 class="process__title">${esc(tr(s.title))}</h3>` : ""}
-                ${prose(s.text)}
-                ${figure(s.image, "process__figure")}
-              </div>
-            </li>`
-          )
-          .join("")}</ol>`
+    // 01 はメイン画像なので、下部には 02 以降だけを並べる
+    const rest = photos.slice(1).map((ph, i) => ({ ...ph, alt: `${title} — ${pad(i + 2)}` }));
+    const gallery = rest.length
+      ? `<section class="work-photos" aria-label="${esc(ui("photos"))}"><div class="gallery">${rest.map((g) => figure(g, "gallery__item")).join("")}</div></section>`
       : "";
-
-    const gallery = list(w.gallery).length
-      ? `<div class="gallery">${list(w.gallery).map((g) => figure(g, "gallery__item")).join("")}</div>`
-      : "";
-
-    const recognition = ["awards", "exhibitions", "publications"]
-      .filter((k) => list(w[k]).length)
-      .map((k) => `<div class="records-group"><h3 class="label">${esc(ui(k))}</h3>${records(w[k])}</div>`)
-      .join("");
-
-    // category はデータに残すが、現在は表示しない
-    const meta = ["year", "role"]
-      .filter((k) => tr(w[k]))
-      .map((k) => `<div><dt class="label">${esc(ui(k))}</dt><dd>${esc(tr(w[k]))}</dd></div>`)
-      .join("");
 
     const prev = WORKS[(index - 1 + WORKS.length) % WORKS.length];
     const next = WORKS[(index + 1) % WORKS.length];
-    const heroCaption = hero && tr(hero.caption);
 
     main.innerHTML = `
       <article class="work">
         <header class="work-head">
           <a class="back-link label" href="index.html">${esc(ui("backToWorks"))}</a>
           <h1 class="page-title work-title">${esc(title)}</h1>
+          ${w.year ? `<p class="work-year">${esc(w.year)}</p>` : ""}
         </header>
         ${
           hero
-            ? `<figure class="work-hero">${img(hero, { eager: true, alt: tr(hero.alt) || title })}${
-                heroCaption ? `<figcaption>${esc(heroCaption)}</figcaption>` : ""
-              }</figure>`
+            ? `<figure class="work-hero"><button type="button" class="zoom" data-zoom aria-label="${esc(ui("enlarge"))}: ${esc(title)}">${img(hero, { eager: true, alt: title })}</button></figure>`
             : ""
         }
-        <dl class="work-meta">${meta}</dl>
-        ${block(ui("concept"), prose(w.concept, "lead"))}
         ${block(ui("overview"), prose(w.overview))}
-        ${block(ui("process"), process)}
-        ${block(ui("materials"), specs(w.materials))}
-        ${customSections(w.sections)}
-        ${block(ui("gallery"), gallery, "wide")}
-        ${block(ui("recognition"), recognition)}
         ${block(ui("credits"), specs(w.credits))}
+        ${block(ui("awardsSelections"), records(workAwards(w)))}
+        ${w.links ? block(ui("links"), workLinks(w.links)) : ""}
+        ${gallery}
       </article>
       ${
         WORKS.length > 1
@@ -336,6 +309,45 @@
             </nav>`
           : ""
       }`;
+  }
+
+  // 受賞・選考歴は profile.js の awards から id で引く（ABOUT と同じ表記・状況になる）
+  function workAwards(w) {
+    return list(w.awards)
+      .map((ref) => {
+        const a = list(PROFILE.awards).find((x) => x.id === ref.id);
+        if (!a) return null;
+        const related = ref.relatedWork ? ui("relatedWork").replace("{title}", ref.relatedWork) : null;
+        return { ...a, detail: related ? [related] : a.detail };
+      })
+      .filter(Boolean);
+  }
+
+  // LINKS：3Dデータと掲載記事。まだないものは「公開準備中」「追加予定」と表示する
+  function workLinks(links) {
+    const linkTitle = (title, href) => {
+      const t = esc(tr(title) || href);
+      return href ? `<a class="text-link" href="${esc(href)}"${isExternal(href) ? linkAttrs(href) : " download"}>${t}</a>` : t;
+    };
+    const item = (title, lines, pending) => `<li>
+        <span class="links__title">${title}</span>
+        ${lines.filter(Boolean).map((d) => `<span class="links__detail">${esc(d)}</span>`).join("")}
+        ${pending ? `<span class="links__detail">${esc(pending)}</span>` : ""}
+      </li>`;
+    const group = (label, items, empty) => `<div class="records-group">
+        <h3 class="label">${esc(label)}</h3>
+        <ul class="links">${items.length ? items.join("") : `<li><span class="links__detail">${esc(empty)}</span></li>`}</ul>
+      </div>`;
+
+    const data = list(links.data).map((d) => {
+      const href = d.url || d.file;
+      const license = tr(d.license) ? `${ui("license")}: ${tr(d.license)}` : "";
+      return item(linkTitle(d.title, href), [tr(d.description), license], href ? "" : ui("comingSoon"));
+    });
+    const articles = list(links.articles).map((r) =>
+      item(linkTitle(r.title, r.url), [tr(r.source)], r.url ? "" : ui("toBeAdded"))
+    );
+    return group(ui("data3d"), data, ui("comingSoon")) + group(ui("articles"), articles, ui("toBeAdded"));
   }
 
   function renderNotFound(main) {

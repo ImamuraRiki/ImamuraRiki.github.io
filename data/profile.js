@@ -51,6 +51,7 @@ window.PROFILE = {
   ],
 
   // 受賞・選考歴
+  //   id     作品ページ（works.js の awards）から参照するためのID。変えないでください
   //   year   活動年（コンテスト名の年ではなく、活動した年）
   //   title  コンテストの正式名称
   //   status 選考状況。公式発表があったら、ここだけを書き換えます
@@ -58,21 +59,25 @@ window.PROFILE = {
   //   url    公式ページなど（任意）
   awards: [
     {
+      id: "nippori-2026",
       year: "2026",
       title: { en: "Nippori Fashion Design Contest 2026", ja: "日暮里ファッションデザインコンテスト2026" },
       status: { en: "Selected (Final results pending)", ja: "入選（最終結果発表待ち）" },
     },
     {
+      id: "nfdt-2027",
       year: "2026",
       title: "Next Fashion Designer of Tokyo 2027",
       status: { en: "Passed the First Screening (Work in progress)", ja: "一次審査通過（作品制作中）" },
     },
     {
+      id: "ykk-fastening-awards-26",
       year: "2026",
       title: { en: "The 26th YKK FASTENING AWARDS", ja: "第26回 YKKファスニングアワード" },
       status: { en: "Selected (Final awards pending)", ja: "入選（最終結果発表待ち）" },
     },
     {
+      id: "japan-leather-award-2026",
       year: "2026",
       title: { en: "Japan Leather Award 2026", ja: "ジャパンレザーアワード2026" },
       status: { en: "Selected Work (Final awards pending)", ja: "入賞（最終結果発表待ち）" },

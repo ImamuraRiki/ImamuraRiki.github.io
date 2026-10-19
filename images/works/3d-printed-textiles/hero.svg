@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350">
-<defs><pattern id="p" width="81.0" height="81.0" patternUnits="userSpaceOnUse"><circle cx="40.5" cy="40.5" r="4.0" fill="#cfcdc7"/><path d="M0,40.5 H81.0" stroke="#cfcdc7" stroke-width="1.2" opacity=".6"/></pattern></defs>
-<rect width="2400" height="1350" fill="#e8e7e3"/>
-<rect x="162" y="162" width="2076" height="1026" fill="url(#p)"/>
-<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" fill="#9b9993" letter-spacing="5.3">
-<text x="162" y="1257">3D PRINTED TEXTILES — HERO</text>
-<text x="162" y="1322">16:9 PLACEHOLDER</text>
-</g>
-</svg>

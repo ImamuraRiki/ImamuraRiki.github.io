@@ -3,46 +3,43 @@
  * ------------------------------------------------------------
  * ここに書いた作品が、トップページの一覧と詳細ページ（work.html?id=...）に
  * 自動で表示されます。並び順 ＝ 一覧の表示順です。
+ * 詳細ページはすべて同じ形式で、次の順に表示されます（データがない項目は表示されません）。
+ *   作品名 → 制作年 → メイン画像 → 概要 → クレジット → 受賞・選考歴 → リンク → その他の作品画像
  *
  * ■ 作品を追加する手順
- *   1. images/works/<id>/ フォルダを作り、画像を入れる
+ *   1. photo/<フォルダ>/ に写真を 01.jpg, 02.jpg ... の名前で入れる（01 がメイン画像・一覧のサムネイル）
  *   2. 下の作品ブロックを1つコピーして貼り付け、内容を書き換える
- *   3. id は半角英小文字とハイフンのみ（URLになります。公開後は変えない）
+ *   3. id は半角英小文字・数字・ハイフンのみ（URLになります。公開後は変えない）
+ *   4. node tools/build.mjs を実行（写真を images/works/<id>/photos/ にコピーし、一覧を data/photos.js に書き出します）
  *
  * ■ 日本語・英語
  *   文章は { en: "英語", ja: "日本語" } の形で書きます。段落が複数ある項目は
  *   { en: ["段落1", "段落2"], ja: ["段落1", "段落2"] } です。
  *   作品名は翻訳しません。"LEATHER CELL VEST" のように英語表記の文字列で書きます。
  *
- * ■ 項目（必須は id / title / year / category / cover）
+ * ■ 項目（必須は id / title / year / photoDir）
  *   id          URL用ID
  *   title       作品名。固有名詞なので翻訳せず、英語表記の文字列で書く
  *               （日本語表示でも同じ表記。{ en, ja } で書いても英語が使われます）
- *   year        制作年
+ *   year        制作年（作品名の下に表示）
  *   category    カテゴリー（現在は画面に表示していません。将来の再表示用に残しています）
  *   tags        将来のカテゴリー絞り込み用（design / technology / research）。現在は表示に使っていません
- *   summary     一行説明（検索結果・SNSシェア用）
- *   cover       一覧に表示する画像（正方形 1:1 で表示。中央を基準に切り抜き）
- *   coverPosition 切り抜く位置を調整したいとき（CSS の object-position。例 "50% 30%" で上寄り）。省略時 "50% 50%"
- *   coverRatio  一覧の画像比率を変えたいとき（例 "4 / 5"）。省略時 "1 / 1"
- *   hero        詳細ページのメインビジュアル（縦長・横長どちらも可）
- *   concept     コンセプト
- *   overview    作品概要
- *   process     制作プロセス [{ title, text, image }]
- *   materials   使用技術・素材 [{ label, value }]
- *   gallery     写真ギャラリー [{ src, alt, caption, size }]
- *                 size: 省略 = 自動（横長は全幅、縦長は2列）/ "full" = 全幅
- *   awards / exhibitions / publications   [{ year, title, detail, url }]
- *                 （空なら非表示。公表済みの情報のみ）
- *   credits     クレジット [{ label, value }]
- *   sections    自由セクション [{ label, text }]
+ *   summary     一行説明（検索結果・SNSシェア用。画面には表示されません）
+ *   photoDir    写真の元フォルダ。01 がメイン画像と一覧のサムネイル、02 以降がページ下部の作品画像
+ *               （ファイル名の順。jpg / png / webp）。元フォルダのファイルは変更されません
+ *   coverPosition 一覧の正方形サムネイルで切り抜く位置（CSS の object-position。例 "50% 30%" で上寄り）。省略時 "50% 50%"
+ *   overview    概要
+ *   credits     クレジット [{ label: 役割, value: 名前 }]（複数可。人名は英語表記の文字列）
+ *   awards      受賞・選考歴。profile.js の awards の id を参照します（ABOUT と同じ表記・状況で表示）
+ *                 [{ id: "japan-leather-award-2026" }]
+ *                 関連作品の実績のときは { id: "...", relatedWork: "作品名" }
+ *   links       リンク（この項目を書いた作品だけ LINKS を表示）
+ *                 data      3Dデータ [{ title, url, file, description, license }]
+ *                             url = 外部の公開ページ / file = このサイト内のファイル（例 "files/leather-cell-vest/vest.stl"）
+ *                             空 [] のときは「公開準備中 / Coming soon」と表示
+ *                 articles  掲載記事・外部リンク [{ title, source, url }]
+ *                             空 [] のとき、または url がないときは「追加予定 / To be added」と表示
  *   draft       true にすると非公開（一覧・詳細に出ません）
- *
- * 画像は { src, alt, caption } の形のほか、"images/..." のパス文字列だけでも書けます。
- * alt（画像の説明文）は、画面読み上げと検索のために入れておくのがおすすめです。
- * 写真を差し替えるときは .jpg / .webp を同じフォルダに置き、src のパスを書き換えます。
- *
- * ※ 以下の文章・年・素材・画像はすべて仮のものです。
  */
 window.WORKS = [
   {
@@ -52,79 +49,28 @@ window.WORKS = [
     category: { en: "Fashion Design / 3D Printing", ja: "ファッションデザイン / 3Dプリント" },
     tags: ["design", "technology"],
     summary: {
-      en: "A vest built from a cellular structure, combining 3D-printed components and leather.",
-      ja: "3Dプリントのパーツとレザーを組み合わせた、セル構造によるベスト。",
+      en: "LEATHER CELL VEST by Riki Imamura: a modular vest assembled from “LEATHER CELL” units made of 3D-printed components and 0.3 mm-thick sheepskin leather.",
+      ja: "今村吏希による LEATHER CELL VEST。3Dプリントパーツと0.3mm厚のシープレザーによるユニット「LEATHER CELL」を組み合わせたモジュール式のベスト。",
     },
-    cover: { src: "images/works/leather-cell-vest/cover.jpg", alt: "", width: 1023, height: 1023 },
-    coverPosition: "50% 50%",
-    hero: {
-      src: "images/works/leather-cell-vest/hero.svg",
-      alt: { en: "LEATHER CELL VEST, front view", ja: "LEATHER CELL VEST 正面" },
-    },
-    concept: {
-      en: ["A garment that behaves like tissue: many small cells, each simple, together producing a surface that can bend, breathe and hold its shape."],
-      ja: ["生体組織のようにふるまう衣服。ひとつひとつは単純な小さなセルが集まり、しなやかに曲がり、通気し、かたちを保つ面をつくる。"],
-    },
+    photoDir: "photo/L",
     overview: {
       en: [
-        "LEATHER CELL VEST explores how a cellular structure can replace conventional seams and darts. The vest is assembled from repeated units, so its fit is shaped by the geometry of the cells rather than by cutting and sewing.",
-        "Placeholder text — replace with a description of the work, its scale, and the context in which it was made.",
+        "Conventional leather garments are made by cutting materials according to patterns and assembling them through sewing, making localized repairs and significant changes to the silhouette difficult.",
+        "LEATHER CELL VEST proposes an alternative approach to garment construction through a modular system.",
+        "Individual units called “LEATHER CELL,” made from 3D-printed components and 0.3 mm-thick sheepskin leather, are assembled to follow the contours of the body. This structure allows individual units to be replaced or repaired, while also enabling the silhouette to be reconfigured.",
       ],
       ja: [
-        "LEATHER CELL VEST は、セル構造によって従来の縫い目やダーツを置き換える試みです。繰り返しのユニットで組み立てられたベストは、裁断と縫製ではなく、セルの形状によって身体へのフィットが決まります。",
-        "仮のテキストです。作品の説明、規模、制作の背景などに差し替えてください。",
+        "従来のレザー衣服は、型紙に沿って素材を裁断し、縫製によって仕立てられるため、部分的な修理や大幅なシルエットの変更が難しい。",
+        "LEATHER CELL VESTは、こうした課題に対してモジュール構造による新たな衣服のあり方を提案する作品である。",
+        "3Dプリントパーツと0.3mm厚のシープレザーから構成される独自のユニット「LEATHER CELL」を、身体の形状に沿って組み合わせることで、個々のユニットの交換・修理や、組み替えによるシルエットの変更を可能にしている。",
       ],
     },
-    process: [
-      {
-        title: { en: "Cell design", ja: "セルの設計" },
-        text: {
-          en: "Developing the unit geometry and testing how cells connect, flex and distribute load across the body.",
-          ja: "ユニットの形状を設計し、セル同士の接続、しなり、身体にかかる力の分散を検証する。",
-        },
-        image: {
-          src: "images/works/leather-cell-vest/process-01.svg",
-          alt: { en: "Cell geometry studies", ja: "セル形状のスタディ" },
-          caption: { en: "Cell geometry studies", ja: "セル形状のスタディ" },
-        },
-      },
-      {
-        title: { en: "Printing and assembly", ja: "出力と組み立て" },
-        text: {
-          en: "Printing the components and joining them with leather into a single wearable surface.",
-          ja: "パーツを出力し、レザーと接合して一枚の着用可能な面に仕上げる。",
-        },
-        image: {
-          src: "images/works/leather-cell-vest/process-02.svg",
-          alt: { en: "Assembly of printed components", ja: "出力パーツの組み立て" },
-          caption: { en: "Assembly", ja: "組み立て" },
-        },
-      },
-      {
-        title: { en: "Fitting", ja: "フィッティング" },
-        text: {
-          en: "Adjusting cell density and size on the body to refine the silhouette.",
-          ja: "身体に合わせてセルの密度と大きさを調整し、シルエットを整える。",
-        },
-      },
-    ],
-    materials: [
-      { label: { en: "Technique", ja: "技術" }, value: { en: "FDM 3D printing, hand assembly", ja: "FDM方式3Dプリント、手作業による組み立て" } },
-      { label: { en: "Material", ja: "素材" }, value: { en: "TPU, leather", ja: "TPU、レザー" } },
-      { label: { en: "Software", ja: "ソフトウェア" }, value: "Rhinoceros, Grasshopper" },
-    ],
-    gallery: [
-      { src: "images/works/leather-cell-vest/gallery-01.svg", alt: { en: "Front view", ja: "正面" }, caption: { en: "Front", ja: "正面" } },
-      { src: "images/works/leather-cell-vest/gallery-02.svg", alt: { en: "Back view", ja: "背面" }, caption: { en: "Back", ja: "背面" } },
-      { src: "images/works/leather-cell-vest/gallery-03.svg", alt: { en: "Detail of the cellular structure", ja: "セル構造のディテール" }, caption: { en: "Detail", ja: "ディテール" } },
-      { src: "images/works/leather-cell-vest/gallery-04.svg", alt: { en: "Side view", ja: "側面" }, caption: { en: "Side", ja: "側面" } },
-    ],
-    awards: [],
-    exhibitions: [],
-    credits: [
-      { label: { en: "Design", ja: "デザイン" }, value: "Riki Imamura" },
-      // { label: { en: "Photography", ja: "写真" }, value: "Name" },
-    ],
+    credits: [{ label: { en: "Design", ja: "デザイン" }, value: "Riki Imamura" }],
+    awards: [{ id: "japan-leather-award-2026" }],
+    links: {
+      data: [],
+      articles: [],
+    },
   },
 
   {
@@ -134,39 +80,25 @@ window.WORKS = [
     category: { en: "Structure / 3D Printing", ja: "構造 / 3Dプリント" },
     tags: ["design", "technology"],
     summary: {
-      en: "A curved cellular structure that lets flat-printed surfaces take on three-dimensional form.",
-      ja: "平面に出力した面が立体的なかたちをとる、曲線のセル構造。",
+      en: "CURVE CELL BAG by Riki Imamura: a modular bag of “CURVE CELL” units made with 3D-printed components and YKK’s PLANCER® snap fasteners, joined without adhesives.",
+      ja: "今村吏希による CURVE CELL BAG。3DプリントパーツとYKKのスナップボタン「PLANCER®」によるユニット「CURVE CELL」を、接着剤を使わずに組み合わせたモジュール式のバッグ。",
     },
-    cover: { src: "images/works/curve-cell/cover.jpg", alt: "", width: 1086, height: 1086 },
-    coverPosition: "50% 50%",
-    hero: { src: "images/works/curve-cell/hero.svg", alt: { en: "CURVE CELL BAG structure", ja: "CURVE CELL BAG の構造" } },
-    concept: {
-      en: ["Curves instead of corners: a cell shape designed so that a flat print can follow the curvature of the body."],
-      ja: ["角ではなく曲線で。平面の出力物が身体の曲面に沿うように設計したセル形状。"],
-    },
+    photoDir: "photo/C",
     overview: {
-      en: ["Placeholder text — describe the structure, how it deforms, and how it is used in garments."],
-      ja: ["仮のテキストです。構造の特徴、変形のしかた、衣服での使い方などを記述してください。"],
+      en: [
+        "CURVE CELL BAG is a modular bag constructed from individual “CURVE CELL” units made with 3D-printed components and YKK’s PLANCER® snap fasteners.",
+        "Inspired by the interlacing structure of plain-woven fabric, the units are connected without the use of adhesives.",
+        "By rearranging the CURVE CELL units, the bag can be adapted in size and color to suit different uses and preferences. Its modular construction also allows individual units to be replaced or repaired.",
+      ],
+      ja: [
+        "3DプリントパーツとYKKのスナップボタン「PLANCER®」から構成される独自のユニット「CURVE CELL」を組み合わせた、モジュール式のバッグ。",
+        "布地の平織りに着想を得た独特の構造により、接着剤を一切使用せずに各ユニットを接合している。",
+        "CURVE CELLを組み替えることで、用途や好みに応じたサイズやカラーへの変更が可能であり、個々のユニットの交換・修理にも対応している。",
+      ],
     },
-    process: [
-      {
-        title: { en: "Geometry", ja: "形状設計" },
-        text: { en: "Designing curved cell outlines and comparing their flexibility.", ja: "曲線によるセルの輪郭を設計し、柔軟性を比較する。" },
-      },
-      {
-        title: { en: "Prototyping", ja: "試作" },
-        text: { en: "Printing test samples and evaluating drape and recovery.", ja: "テストサンプルを出力し、ドレープ性と復元性を評価する。" },
-      },
-    ],
-    materials: [
-      { label: { en: "Technique", ja: "技術" }, value: { en: "3D printing on textile", ja: "布への3Dプリント" } },
-      { label: { en: "Material", ja: "素材" }, value: { en: "TPU, polyester mesh", ja: "TPU、ポリエステルメッシュ" } },
-    ],
-    gallery: [
-      { src: "images/works/curve-cell/gallery-01.svg", alt: { en: "Structure sample", ja: "構造サンプル" }, caption: { en: "Sample", ja: "サンプル" } },
-      { src: "images/works/curve-cell/gallery-02.svg", alt: { en: "Worn view", ja: "着用イメージ" } },
-      { src: "images/works/curve-cell/gallery-03.svg", alt: { en: "Detail", ja: "ディテール" } },
-    ],
+    credits: [{ label: { en: "Design", ja: "デザイン" }, value: "Riki Imamura" }],
+    awards: [{ id: "ykk-fastening-awards-26" }],
+    // links: { data: [], articles: [] },  // 追加すると LINKS が表示されます
   },
 
   {
@@ -174,33 +106,35 @@ window.WORKS = [
     title: "3D PRINTED TEXTILES",
     year: "2026",
     category: { en: "Textile / 3D Printing", ja: "テキスタイル / 3Dプリント" },
-    tags: ["design", "technology"],
+    tags: ["research", "technology"],
     summary: {
-      en: "Textiles made by 3D printing, exploring new surfaces and structures for clothing.",
-      ja: "3Dプリントによるテキスタイル。衣服のための新しい表面と構造を探る。",
+      en: "3D PRINTED TEXTILES by Riki Imamura: research into garment production by directly 3D printing textiles in the shapes of clothing patterns, with software that converts DXF patterns into STL files.",
+      ja: "今村吏希による 3D PRINTED TEXTILES。3Dプリンタで衣服の型紙形状を直接造形する製造方法と、DXFの型紙データからSTLデータを生成するソフトウェアの開発。",
     },
-    cover: { src: "images/works/3d-printed-textiles/cover.jpg", alt: "", width: 1086, height: 1086 },
-    coverPosition: "50% 50%",
-    hero: { src: "images/works/3d-printed-textiles/hero.svg", alt: { en: "3D PRINTED TEXTILES samples", ja: "3D PRINTED TEXTILES のサンプル" } },
-    concept: {
-      en: ["Placeholder text — describe the idea behind the textiles."],
-      ja: ["仮のテキストです。テキスタイルのコンセプトを記述してください。"],
-    },
+    photoDir: "photo/3",
     overview: {
-      en: ["Placeholder text — describe the textiles, how they are made, and how they are used in garments."],
-      ja: ["仮のテキストです。テキスタイルの特徴、制作方法、衣服での使い方などを記述してください。"],
+      en: [
+        "This project explores a new approach to garment production by directly 3D printing textile structures in the shapes of clothing patterns.",
+        "By eliminating the conventional fabric-cutting stage, the process aims to reduce the material offcuts generated during garment production. Controlling the structure and thickness of the printed textiles also makes it possible to introduce properties such as flexibility and stretchability according to their intended applications.",
+        "I am also developing software that reads garment pattern data in DXF format and generates STL files for 3D printing based on parameters such as structural design and thickness.",
+        "By integrating pattern design with textile fabrication, this approach aims to enable a more efficient and adaptable garment production process.",
+      ],
+      ja: [
+        "3Dプリンタを用いて衣服の型紙形状を直接造形する、新たな衣服製造方法の探究。",
+        "従来の布地の裁断工程を省くことで、裁断時に発生する端材の削減を目指している。また、テキスタイルの構造や厚みを制御することにより、柔軟性や伸縮性など、用途に応じた特性を持たせることができる。",
+        "さらに、衣服の型紙のDXFデータを読み込み、構造や厚みなどのパラメータを設定することで、3Dプリントに使用するSTLデータを生成するソフトウェアを開発している。",
+        "これにより、パターン設計からテキスタイルの造形までを一体化し、より効率的で柔軟な衣服制作の実現を目指している。",
+      ],
     },
-    process: [
-      { title: { en: "Material tests", ja: "素材の検証" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
-      { title: { en: "Printing", ja: "出力" }, text: { en: "Placeholder text.", ja: "仮のテキストです。" } },
+    credits: [
+      { label: { en: "Design & Research", ja: "デザイン・リサーチ" }, value: "Riki Imamura" },
+      { label: { en: "Software Development", ja: "ソフトウェア開発" }, value: "Riki Imamura" },
     ],
-    materials: [
-      { label: { en: "Technique", ja: "技術" }, value: { en: "3D printing", ja: "3Dプリント" } },
-      { label: { en: "Material", ja: "素材" }, value: { en: "Placeholder", ja: "仮" } },
+    // 関連作品（ZERO CUT PATTERN / EXTENDED SKIN）での実績。テキスタイル研究そのものの受賞ではない
+    awards: [
+      { id: "nippori-2026", relatedWork: "ZERO CUT PATTERN" },
+      { id: "nfdt-2027", relatedWork: "EXTENDED SKIN" },
     ],
-    gallery: [
-      { src: "images/works/3d-printed-textiles/gallery-01.svg", alt: { en: "Textile sample", ja: "テキスタイルのサンプル" }, caption: { en: "Sample", ja: "サンプル" } },
-      { src: "images/works/3d-printed-textiles/gallery-02.svg", alt: { en: "Detail", ja: "ディテール" }, caption: { en: "Detail", ja: "ディテール" } },
-    ],
+    // links: { data: [], articles: [] },  // 追加すると LINKS が表示されます
   },
 ];

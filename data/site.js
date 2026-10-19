@@ -44,8 +44,8 @@ window.SITE = {
   // ヘッダーのナビゲーション（ページを増やすときはここに追加）
   nav: [
     { id: "works", label: { en: "PROJECTS", ja: "プロジェクト" }, href: "index.html" },
-    { id: "about", label: { en: "About", ja: "プロフィール" }, href: "about.html" },
-    { id: "contact", label: { en: "Contact", ja: "お問い合わせ" }, href: "contact.html" },
+    { id: "about", label: { en: "ABOUT", ja: "プロフィール" }, href: "about.html" },
+    { id: "contact", label: { en: "CONTACT", ja: "お問い合わせ" }, href: "contact.html" },
   ],
 
   contact: {
